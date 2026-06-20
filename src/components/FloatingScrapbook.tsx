@@ -39,7 +39,10 @@ export default function FloatingScrapbook({
     "1": "Cà phê vỉa hè ngắm biển Positano dốc dựng đứng, nắng lóa cả mắt!",
     "2": "Chèo thuyền gỗ sương sớm, Alex tí nữa là rớt điện thoại xuống hồ lạnh buốt.",
     "3": "Bấc lửa trại nướng kẹo dẻo ấm sực giữa đêm Bắc Âu xanh ngắt màu lục bảo.",
-    "4": "Croatia siêu đẹp rêu phong, đi bộ rã rời 15,000 bước chân!"
+    "4": "Croatia siêu đẹp rêu phong, đi bộ rã rời 15,000 bước chân!",
+    "5": "Đóng băng toàn tập, mũi đỏ ửng vì lạnh nhưng cảnh quá choáng ngợp!",
+    "6": "Ngắm bình minh muộn ở thung lũng, tĩnh lặng đến lạ kỳ.",
+    "7": "Mặc áo mưa đi dưới thác mà vẫn ướt sũng, bù lại cầu vồng siêu đẹp!"
   });
 
   const [activeInputId, setActiveInputId] = useState<string | null>(null);
@@ -244,6 +247,9 @@ export default function FloatingScrapbook({
                   {index === 1 && "🚣 Những lát dăm gỗ bào rơi rớt trên khoang thuyền, mặt nước lổ loang ánh nắng chói dại."}
                   {index === 2 && "🌌 Đuổi theo cực quang tới mỏi nhừ đôi gối. Nhấp hớp socola nóng giữa lều trại."}
                   {index === 3 && "🍁 Thác nước rầm rì dội vang thung lũng, rêu mọc xanh rì bám rễ vách thạch nhũ."}
+                  {index === 4 && "❄️ Đứng giữa lớp băng dày cộp, ngắm nhìn đỉnh núi tuyết xa xăm in bóng."}
+                  {index === 5 && "🌲 Hít một hơi thật sâu không khí trong lành của thung lũng ngập tràn sương sớm."}
+                  {index === 6 && "💧 Tiếng nước đổ ầm ầm vang vọng, bọt tung trắng xóa dưới chân cầu."}
                 </p>
 
                 <div className="mt-3 text-right">
@@ -267,6 +273,9 @@ export default function FloatingScrapbook({
                   {index === 1 && "Hồ nằm ở cao độ 1,496m, đáy hồ sâu hơn 30 mét trong vắt."}
                   {index === 2 && "Cực quang sinh ra từ vụ nổ bão từ mặt trời va chạm khí quyển."}
                   {index === 3 && "Hệ hồ bậc thang liên kết tự nhiên độc đáo bậc nhất Đông Âu."}
+                  {index === 4 && "Banff có hơn 1000 dòng sông băng cổ đại kiến tạo nên."}
+                  {index === 5 && "Yosemite nổi tiếng với các khối đá granite khổng lồ vươn mình."}
+                  {index === 6 && "Thác Skógafoss rộng 25 mét và thả dốc thẳng đứng 60 mét."}
                 </span>
               </div>
 

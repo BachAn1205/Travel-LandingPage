@@ -40,6 +40,36 @@ export const initialTimelineItems: TimelineItem[] = [
     imageUrl: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=800&auto=format&fit=crop",
     handwrittenCaption: "Nature's secret sanctuary...",
     likes: 428,
+  },
+  {
+    id: "5",
+    title: "Sông Băng Vĩnh Cửu",
+    location: "Vườn Quốc Gia Banff, Canada",
+    date: "2 tháng 7, 2025",
+    description: "Mặt hồ đóng băng phẳng lặng như một tấm gương khổng lồ phản chiếu trọn vẹn những đỉnh núi tuyết trắng phau đang rực sáng dưới ánh nắng ban mai. Cái lạnh cắt da không thể ngăn cản được nhịp đập rộn ràng của trái tim.",
+    imageUrl: "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?q=80&w=800&auto=format&fit=crop",
+    handwrittenCaption: "Cold air, warm heart ❄️",
+    likes: 671,
+  },
+  {
+    id: "6",
+    title: "Bình Minh Thung Lũng",
+    location: "Thung Lũng Yosemite, California",
+    date: "5 tháng 7, 2025",
+    description: "Đứng từ trên đỉnh đồi nhìn xuống dòng sông uốn lượn tuyệt đẹp ôm lấy những rặng cây đang đổi màu. Khung cảnh hoang sơ và hùng vĩ khiến con người ta chợt nhận ra mình nhỏ bé đến nhường nào.",
+    imageUrl: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=800&auto=format&fit=crop",
+    handwrittenCaption: "Lost in the wilderness...",
+    likes: 924,
+  },
+  {
+    id: "7",
+    title: "Dòng Chảy Bất Tận",
+    location: "Thác Skógafoss, Iceland",
+    date: "10 tháng 7, 2025",
+    description: "Âm thanh cuồn cuộn của dòng thác khổng lồ đổ ập xuống từ độ cao hàng chục mét vang vọng cả một góc trời. Làn sương mờ ảo tung bọt trắng xóa ôm lấy cây cầu gỗ nhuốm màu thời gian.",
+    imageUrl: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?q=80&w=800&auto=format&fit=crop",
+    handwrittenCaption: "The power of water 💧",
+    likes: 540,
   }
 ];
 
