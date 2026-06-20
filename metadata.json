@@ -1,0 +1,6 @@
+{
+  "name": "The Immersive Story",
+  "description": "An elegant, cinematic travel landing page featuring an immersive full-screen hero section, an interactive horizontal scrapbook film-roll timeline, and a collaborative album with real-time PDF printing.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
