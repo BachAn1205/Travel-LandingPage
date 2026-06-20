@@ -142,14 +142,14 @@ export default function FloatingScrapbook({
   }, [timelineItems]);
 
   return (
-    <div id="timeline-section" ref={triggerRef} className="relative w-full h-screen overflow-hidden bg-[#070707] z-30 select-none">
+    <div id="timeline-section" ref={triggerRef} className="relative w-full h-screen overflow-hidden bg-[var(--theme-bg)] z-30 select-none transition-colors duration-700">
       
       {/* Background elegant coordinates, grid patterns & decorative ink drops */}
-      <div className="absolute inset-x-0 top-0 h-18 bg-gradient-to-b from-[#080808] to-transparent z-10 pointer-events-none" />
-      <div className="absolute inset-x-0 bottom-0 h-18 bg-gradient-to-t from-[#080808] to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-x-0 top-0 h-18 bg-gradient-to-b from-[var(--theme-bg)] to-transparent z-10 pointer-events-none transition-colors duration-700" />
+      <div className="absolute inset-x-0 bottom-0 h-18 bg-gradient-to-t from-[var(--theme-bg)] to-transparent z-10 pointer-events-none transition-colors duration-700" />
       
       {/* Vintage ledger lines run in the static background */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:100%_40px] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(var(--theme-border)_1px,transparent_1px)] bg-[size:100%_40px] pointer-events-none transition-colors duration-700" />
       <div className="absolute left-1/4 top-0 bottom-0 w-[1px] bg-red-950/20 border-l border-red-500/10 pointer-events-none" />
 
       {/* HORIZONTAL SCRAPBOOK CONTAINER */}
@@ -161,42 +161,42 @@ export default function FloatingScrapbook({
         
         {/* FIRST COLUMN: Cinematic Introduction & Instructions overlay */}
         <div className="flex-shrink-0 w-[320px] sm:w-[420px] flex flex-col justify-center space-y-6 relative z-20">
-          <div className="absolute -top-12 -left-4 font-mono text-[9px] tracking-[0.4em] text-neutral-600 block bg-zinc-900/.4 px-2 py-1 rounded">
+          <div className="absolute -top-12 -left-4 font-mono text-[9px] tracking-[0.4em] text-[var(--theme-text-muted)] block bg-[var(--theme-panel)] px-2 py-1 rounded">
             SECTION 02 // TIMELINE CORE
           </div>
 
           <div className="space-y-3">
-            <span className="flex items-center space-x-1.5 text-xs text-stone-500 font-mono tracking-widest uppercase">
-              <ArrowLeftRight className="h-3 w-3 animate-pulse text-stone-400" />
+            <span className="flex items-center space-x-1.5 text-xs text-[var(--theme-text-muted)] font-mono tracking-widest uppercase">
+              <ArrowLeftRight className="h-3 w-3 animate-pulse opacity-70" />
               <span>Scroll down to slide horizon</span>
             </span>
-            <h2 className="font-serif text-3xl sm:text-5xl font-light tracking-tight text-white leading-tight">
+            <h2 className="font-serif text-3xl sm:text-5xl font-light tracking-tight text-[var(--theme-text)] leading-tight">
               The Floating <br />
-              <span className="italic text-stone-400 font-normal">Scrapbook.</span>
+              <span className="italic text-[var(--theme-text-muted)] font-normal">Scrapbook.</span>
             </h2>
           </div>
 
-          <div className="bg-[#121212]/75 border border-white/5 p-5 rounded-lg shadow-2xl relative text-xs text-stone-400 leading-relaxed font-sans space-y-3">
+          <div className="bg-[var(--theme-panel)] border border-[var(--theme-border)] p-5 rounded-lg shadow-2xl relative text-xs text-[var(--theme-text-muted)] leading-relaxed font-sans space-y-3">
             {/* Paperclip aesthetic sticker */}
-            <div className="absolute -top-4 -right-1 text-stone-500 z-10 transform rotate-12">
-              <Paperclip className="h-6 w-6 text-stone-400" />
+            <div className="absolute -top-4 -right-1 text-[var(--theme-text-muted)] z-10 transform rotate-12 transition-colors duration-700">
+              <Paperclip className="h-6 w-6 opacity-80" />
             </div>
 
-            <p className="font-serif text-sm italic text-stone-300">
+            <p className="font-serif text-sm italic text-[var(--theme-text)] transition-colors duration-700">
               "Ký ức là những mảnh giấy được cắt dán tự do, không theo hàng lối nhưng ngập tràn cảm xúc chân thật nhất."
             </p>
-            <p className="font-sans font-light">
+            <p className="font-sans font-light text-[var(--theme-text)] transition-colors duration-700">
               Lăn chuột dọc trên máy tính hoặc vuốt để ghim và cuộn ngang. Các kỷ niệm được liên kết tự do trên vách tường ký ức kịch tính.
             </p>
 
-            <div className="pt-2 border-t border-white/5 flex items-center space-x-2 text-[9px] font-mono uppercase text-stone-500">
+            <div className="pt-2 border-t border-[var(--theme-border)] flex items-center space-x-2 text-[9px] font-mono uppercase text-[var(--theme-text-muted)] transition-colors duration-700">
               <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-ping" />
               <span>GSAP ScrollTrigger Active</span>
             </div>
           </div>
 
           {/* Doodles/Scissors decoration */}
-          <div className="flex items-center space-x-3 text-stone-600 text-xs font-mono">
+          <div className="flex items-center space-x-3 text-[var(--theme-text-muted)] text-xs font-mono transition-colors duration-700">
             <Scissors className="h-4 w-4" />
             <span>CUT & PIN MANIFESTO</span>
           </div>
@@ -205,7 +205,7 @@ export default function FloatingScrapbook({
         {/* ITERATIVE COLUMNS: RENDER TIMELINE ITEMS WITH DYNAMIC PARALLAX ELEMENT STICKERS */}
         {timelineItems.map((item, index) => {
           // Dynamic rotations to represent authentic sloppy physical scrap look
-          const itemRotations = ["- rotate-2", "rotate-3", "-rotate-1", "rotate-2"];
+          const itemRotations = ["-rotate-2", "rotate-3", "-rotate-1", "rotate-2", "-rotate-3"];
           const polaroidRot = itemRotations[index % itemRotations.length];
           
           // Sticky positions for beautiful chaotic layering
@@ -221,15 +221,40 @@ export default function FloatingScrapbook({
           ];
           const chosenTape = tapes[index % tapes.length];
 
+          // Random connection paths for dashed lines
+          const connectionPaths = [
+            "M 0,50 Q 50,10 100,60",
+            "M 0,40 C 30,90 70,20 100,50",
+            "M 0,60 Q 50,90 100,40",
+            "M 0,50 C 40,10 60,90 100,50",
+            "M 0,45 Q 60,30 100,65"
+          ];
+          const pathD = connectionPaths[index % connectionPaths.length];
+
           return (
             <div 
               key={item.id}
               className="flex-shrink-0 w-[300px] sm:w-[350px] relative flex flex-col justify-center h-full"
             >
+              {/* DASHED CONNECTION LINE TO NEXT ITEM */}
+              {index < timelineItems.length - 1 && (
+                <div className="absolute top-1/2 -right-[100px] sm:-right-[132px] w-[120px] sm:w-[152px] h-32 -translate-y-1/2 z-0 pointer-events-none">
+                  <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" className="opacity-40">
+                    <path 
+                      d={pathD} 
+                      fill="none" 
+                      stroke="var(--theme-border)" 
+                      strokeWidth="2.5" 
+                      strokeDasharray="6 6"
+                      vectorEffect="non-scaling-stroke"
+                    />
+                  </svg>
+                </div>
+              )}
               
               {/* VINTAGE WRITTEN NOTE CARD (Pasted behind or floating around, Parallax slower!)} */}
               <div 
-                className={`absolute ${notePosition} -top-16 w-60 bg-[#161514] p-4 rounded-lg shadow-xl border border-white/5 font-hand select-text transform sc-parallax-slower z-10 hover:z-40 hover:scale-105 transition-all duration-300`}
+                className={`absolute ${notePosition} -top-16 w-60 bg-[var(--theme-panel)] p-4 rounded-lg shadow-xl border border-[var(--theme-border)] font-hand select-text transform sc-parallax-slower z-10 hover:z-40 hover:scale-105 transition-all duration-300`}
                 style={{ transformOrigin: "center bottom" }}
               >
                 {/* Visual Pin sticker at the top */}
@@ -237,12 +262,12 @@ export default function FloatingScrapbook({
                   <Pin className="h-4.5 w-4.5 text-stone-400 rotate-12" />
                 </div>
 
-                <div className="flex justify-between items-center text-[10px] font-mono text-stone-500 uppercase mb-2 border-b border-stone-900 pb-1">
+                <div className="flex justify-between items-center text-[10px] font-mono text-[var(--theme-text-muted)] uppercase mb-2 border-b border-[var(--theme-border)] pb-1 transition-colors duration-700">
                   <span>NOTE N°0{item.id}</span>
                   <span>{item.date.split(',')[1] || "2025"}</span>
                 </div>
 
-                <p className="text-sm text-stone-300 leading-snug">
+                <p className="text-sm text-[var(--theme-text)] leading-snug transition-colors duration-700">
                   {index === 0 && "📸 Mùi mặn biển khơi và gió sườn đồi, Positano làm say lòng kẻ lữ hành..."}
                   {index === 1 && "🚣 Những lát dăm gỗ bào rơi rớt trên khoang thuyền, mặt nước lổ loang ánh nắng chói dại."}
                   {index === 2 && "🌌 Đuổi theo cực quang tới mỏi nhừ đôi gối. Nhấp hớp socola nóng giữa lều trại."}
@@ -253,7 +278,7 @@ export default function FloatingScrapbook({
                 </p>
 
                 <div className="mt-3 text-right">
-                  <span className="text-[10px] uppercase font-mono tracking-widest text-[#737373]">
+                  <span className="text-[10px] uppercase font-mono tracking-widest text-[var(--theme-text-muted)] transition-colors duration-700">
                     — Scrap Memo
                   </span>
                 </div>
@@ -261,14 +286,14 @@ export default function FloatingScrapbook({
 
               {/* SECOND DECORATIVE PAPER CARD OR STICKER FOR TACTILE FEEL (Parallax faster!) */}
               <div 
-                className="absolute right-[-40px] bottom-12 w-44 bg-[#1a1a1a] border border-dashed border-white/10 p-3 rounded transform -rotate-6 sc-parallax-faster z-15 hover:z-40 text-left cursor-help"
+                className="absolute right-[-40px] bottom-12 w-44 bg-[var(--theme-panel)] border border-dashed border-[var(--theme-border)] p-3 rounded transform -rotate-6 sc-parallax-faster z-15 hover:z-40 text-left cursor-help"
                 title="Historical fact"
               >
                 <div className="flex items-center space-x-1.5 mb-1">
                   <span className="inline-block h-1.5 w-1.5 bg-neutral-400 rounded-full" />
-                  <span className="font-mono text-[8px] text-zinc-500 uppercase tracking-widest">LOG FILE</span>
+                  <span className="font-mono text-[8px] text-[var(--theme-text-muted)] uppercase tracking-widest transition-colors duration-700">LOG FILE</span>
                 </div>
-                <span className="font-sans text-[10px] text-zinc-400 italic font-light">
+                <span className="font-sans text-[10px] text-[var(--theme-text)] italic font-light transition-colors duration-700">
                   {index === 0 && "Positano dốc đứng 45 độ, xây trên đá vôi nguyên sinh cổ đại."}
                   {index === 1 && "Hồ nằm ở cao độ 1,496m, đáy hồ sâu hơn 30 mét trong vắt."}
                   {index === 2 && "Cực quang sinh ra từ vụ nổ bão từ mặt trời va chạm khí quyển."}
@@ -282,19 +307,19 @@ export default function FloatingScrapbook({
               {/* CORE POLAROID CELL */}
               <div 
                 onClick={() => onSelectMemory(item)}
-                className={`relative bg-[#0d0d0d] text-stone-300 p-4 pb-5 rounded shadow-2xl border border-white/5 cursor-pointer ease-out transition-all duration-300 transform group hover:border-white/20 hover:bg-[#111111] ${polaroidRot}`}
+                className={`relative z-10 bg-[#F4F1EB] text-stone-700 p-4 pb-5 rounded shadow-2xl border border-black cursor-pointer ease-out transition-all duration-300 transform-gpu group hover:bg-[#FDFBF7] ${polaroidRot}`}
               >
                 
                 {/* PHYSICAL WASHI TAPE STICKER OVERLAY */}
                 <div className={`absolute -top-4 left-1/2 transform -translate-x-1/2 w-28 h-6 backdrop-blur-[1px] border-l border-r opacity-85 z-30 shadow-md ${chosenTape}`} style={{ backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.03) 10px, rgba(255,255,255,0.03) 20px)" }} />
 
                 {/* Picture screen slot */}
-                <div className="relative w-full aspect-[4/3] bg-stone-950 overflow-hidden border border-[#212121] rounded-sm group-hover:brightness-105 transition-all duration-500">
+                <div className="relative w-full aspect-[4/3] bg-stone-100 overflow-hidden border border-black rounded-sm group-hover:brightness-105 transition-all duration-500">
                   <img 
                     src={item.imageUrl} 
                     alt={item.title} 
                     referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover grayscale-[20%] sepia-[10%] group-hover:grayscale-0 group-hover:sepia-0 group-hover:scale-[1.03] transition-all duration-700 ease-out"
+                    className="w-full h-full object-cover grayscale-[20%] sepia-[10%] group-hover:grayscale-0 group-hover:sepia-0 group-hover:scale-[1.03] transition-all duration-700 ease-out transform-gpu"
                   />
                   
                   {/* Location badge inside Picture container */}
@@ -303,7 +328,7 @@ export default function FloatingScrapbook({
                     <span className="truncate max-w-[130px]">{item.location.split(',')[0]}</span>
                   </div>
 
-                  <span className="absolute bottom-2 right-2 bg-stone-200 text-black text-[8px] font-mono font-bold px-1.5 py-0.5 rounded-sm">
+                  <span className="absolute bottom-2 right-2 bg-stone-200 text-black text-[8px] font-mono font-bold px-1.5 py-0.5 rounded-sm shadow-sm border border-stone-300">
                     {item.date.split(',')[1] || item.date}
                   </span>
                 </div>
@@ -311,29 +336,29 @@ export default function FloatingScrapbook({
                 {/* Polaroid lower margins containing handwriting and dynamic user custom notes */}
                 <div className="mt-4 flex flex-col justify-between">
                   <div className="space-y-1">
-                    <h3 className="font-serif text-base text-[#fafafb] leading-tight font-medium">
+                    <h3 className="font-serif text-base text-stone-900 leading-tight font-medium">
                       {item.title}
                     </h3>
                     
                     {/* Handwritten caption customized or default */}
-                    <div className="relative pt-1 border-t border-white/5">
-                      <p className="font-hand text-xl text-stone-400 italic leading-snug">
+                    <div className="relative pt-1 border-t border-stone-200">
+                      <p className="font-hand text-xl text-stone-800 italic leading-snug">
                         "{customNotes[item.id] || item.handwrittenCaption}"
                       </p>
                     </div>
                   </div>
 
                   {/* Add manual custom note dán đè button */}
-                  <div className="mt-3.5 pt-2.5 border-t border-white/5 flex items-center justify-between">
+                  <div className="mt-3.5 pt-2.5 border-t border-stone-200 flex items-center justify-between">
                     
                     {/* Active likes */}
                     <button
                       onClick={(e) => handleLike(item.id, e)}
-                      className="flex items-center space-x-1.5 text-xs text-stone-400 hover:text-red-500 active:scale-90 transition-transform cursor-pointer"
+                      className="flex items-center space-x-1.5 text-xs text-stone-500 hover:text-red-500 active:scale-90 transition-transform cursor-pointer"
                       title="Vote Love"
                     >
                       <Heart className="h-4.5 w-4.5 fill-red-500 text-red-500 border-none bg-transparent" />
-                      <span className="font-mono text-xs text-stone-400 font-bold">{item.likes}</span>
+                      <span className="font-mono text-xs text-stone-600 font-bold">{item.likes}</span>
                     </button>
 
                     {/* Write customized text sticker trigger */}
@@ -348,21 +373,21 @@ export default function FloatingScrapbook({
                           value={noteDraft}
                           onChange={(e) => setNoteDraft(e.target.value)}
                           placeholder="Nhập note dán tay..."
-                          className="flex-1 text-[10px] p-1.5 bg-black border border-white/10 rounded text-white focus:outline-none focus:border-stone-400"
+                          className="flex-1 text-[10px] p-1.5 bg-transparent border border-stone-300 rounded text-stone-900 focus:outline-none focus:border-stone-500"
                           maxLength={55}
                           required
                           autoFocus
                         />
                         <button 
                           type="submit"
-                          className="text-[9px] bg-white text-black px-2 py-1.5 rounded font-bold hover:bg-neutral-200 cursor-pointer"
+                          className="text-[9px] bg-stone-800 text-white px-2 py-1.5 rounded font-bold hover:bg-stone-900 cursor-pointer"
                         >
                           Dán
                         </button>
                         <button 
                           type="button" 
                           onClick={() => setActiveInputId(null)}
-                          className="text-[9px] text-[#737373] hover:text-white px-1"
+                          className="text-[9px] text-stone-400 hover:text-stone-600 px-1"
                         >
                           X
                         </button>
@@ -374,7 +399,7 @@ export default function FloatingScrapbook({
                           setNoteDraft(customNotes[item.id] || "");
                           setActiveInputId(item.id);
                         }}
-                        className="text-[9px] font-mono tracking-widest text-stone-400 hover:text-white uppercase flex items-center space-x-1 border border-white/5 px-2 py-1 bg-white/5 rounded-full hover:bg-white/10"
+                        className="text-[9px] font-mono tracking-widest text-stone-500 hover:text-stone-900 uppercase flex items-center space-x-1 border border-stone-200 px-2 py-1 bg-stone-100 rounded-full hover:bg-stone-200"
                         title="Dán thêm lời viết tay"
                       >
                         <SquarePen className="h-3 w-3" />
@@ -397,11 +422,11 @@ export default function FloatingScrapbook({
 
         {/* ENDING SOUVENIR STORY PAGE */}
         <div className="flex-shrink-0 w-[240px] flex flex-col justify-center space-y-4 text-center">
-          <div className="h-16 w-16 mx-auto rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
-            <Sparkles className="h-6 w-6 text-[#a3a3a3]" />
+          <div className="h-16 w-16 mx-auto rounded-full bg-[var(--theme-panel)] border border-[var(--theme-border)] flex items-center justify-center">
+            <Sparkles className="h-6 w-6 text-[var(--theme-text-muted)]" />
           </div>
-          <h3 className="font-serif text-lg text-white font-normal uppercase tracking-widest">End of Stream</h3>
-          <p className="text-xs text-stone-400 italic">
+          <h3 className="font-serif text-lg text-[var(--theme-text)] font-normal uppercase tracking-widest">End of Stream</h3>
+          <p className="text-xs text-[var(--theme-text-muted)] italic">
             "We travel not to escape life, but for life not to escape us."
           </p>
         </div>

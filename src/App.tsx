@@ -5,7 +5,7 @@ import CollabAndExportSection from "./components/CollabAndExportSection";
 import ScrapbookDetailModal from "./components/ScrapbookDetailModal";
 import { TimelineItem, AlbumPhoto, Collaborator } from "./types";
 import { initialTimelineItems, initialAlbumPhotos, initialCollaborators } from "./data";
-import { Film, Image as ImageIcon, Sparkles, Heart, Share2, Compass, ArrowUp, Calendar, MapPin } from "lucide-react";
+import { Film, Image as ImageIcon, Sparkles, Heart, Share2, Compass, ArrowUp, Calendar, MapPin, Sun, Moon } from "lucide-react";
 
 export default function App() {
   // App-level state for interactive content
@@ -13,6 +13,9 @@ export default function App() {
   const [albumPhotos, setAlbumPhotos] = useState<AlbumPhoto[]>(initialAlbumPhotos);
   const [collaborators, setCollaborators] = useState<Collaborator[]>(initialCollaborators);
   
+  // Theme state
+  const [isDarkTheme, setIsDarkTheme] = useState(true);
+
   // Modal tracking
   const [selectedMemory, setSelectedMemory] = useState<TimelineItem | null>(null);
 
@@ -50,13 +53,13 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#080808] text-stone-200 font-sans selection:bg-neutral-800 selection:text-white overflow-x-hidden relative">
+    <div className={`min-h-screen bg-[var(--theme-bg)] text-[var(--theme-text)] font-sans selection:bg-neutral-800 selection:text-white overflow-x-hidden relative transition-colors duration-700 ${isDarkTheme ? "dark-theme" : ""}`}>
       
       {/* Floating Top Mini Header (Pinned on scroll) */}
-      <nav className="fixed top-0 inset-x-0 h-14 bg-[#080808]/85 backdrop-blur-md border-b border-white/5 flex items-center justify-between px-6 md:px-12 z-40">
+      <nav className="fixed top-0 inset-x-0 h-14 bg-[var(--theme-overlay)] backdrop-blur-md border-b border-[var(--theme-border)] flex items-center justify-between px-6 md:px-12 z-40 transition-colors duration-700">
         <button 
           onClick={() => scrollToSection("hero-section")} 
-          className="flex items-center space-x-2 text-white hover:text-stone-300 transition-colors cursor-pointer bg-transparent border-none"
+          className="flex items-center space-x-2 text-[var(--theme-text)] hover:opacity-70 transition-opacity cursor-pointer bg-transparent border-none"
         >
           <Film className="h-4 w-4 text-stone-400" />
           <span className="font-serif tracking-widest text-[11px] uppercase font-light">L'IMMERSION</span>
@@ -84,13 +87,23 @@ export default function App() {
           </button>
         </div>
 
-        {/* Floating Quick Action */}
-        <button
-          onClick={() => scrollToSection("collab-section")}
-          className="px-4 py-1.5 rounded-full bg-white/5 hover:bg-white text-stone-300 hover:text-black border border-white/10 text-[10px] font-sans font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer hidden md:block"
-        >
-          Secure Copy
-        </button>
+        {/* Floating Quick Action & Theme Switcher */}
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => setIsDarkTheme(!isDarkTheme)}
+            className="p-1.5 rounded-full border border-[var(--theme-border)] hover:bg-[var(--theme-text)] hover:text-[var(--theme-bg)] text-[var(--theme-text)] transition-colors cursor-pointer flex items-center justify-center"
+            title="Toggle Light/Dark Theme"
+          >
+            {isDarkTheme ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+          </button>
+
+          <button
+            onClick={() => scrollToSection("collab-section")}
+            className="px-4 py-1.5 rounded-full bg-[var(--theme-border)] hover:bg-[var(--theme-text)] text-[var(--theme-text)] hover:text-[var(--theme-bg)] text-[10px] font-sans font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer hidden md:block border-none"
+          >
+            Secure Copy
+          </button>
+        </div>
       </nav>
 
       {/* Main Core View Modules */}
@@ -123,14 +136,14 @@ export default function App() {
       />
 
       {/* FOOTER SECTION: Standard, clean copyrights and creative creds */}
-      <footer className="bg-[#050505] text-[#737373] py-16 px-6 md:px-12 border-t border-neutral-900 z-10 text-center font-sans">
+      <footer className="bg-[var(--theme-panel)] text-[var(--theme-text-muted)] py-16 px-6 md:px-12 border-t border-[var(--theme-border)] z-10 text-center font-sans transition-colors duration-700">
         <div className="max-w-4xl mx-auto space-y-6">
-          <div className="flex items-center justify-center space-x-3 text-white/45">
-            <Compass className="h-6 w-6 animate-spin-slow text-neutral-400" />
-            <span className="font-serif tracking-widest text-sm uppercase text-[#e5e5e7]">THE IMMERSIVE JOURNEY</span>
+          <div className="flex items-center justify-center space-x-3 text-[var(--theme-text-muted)]">
+            <Compass className="h-6 w-6 animate-spin-slow opacity-60" />
+            <span className="font-serif tracking-widest text-sm uppercase text-[var(--theme-text)]">THE IMMERSIVE JOURNEY</span>
           </div>
 
-          <p className="font-serif text-sm italic text-[#a3a3a3] max-w-xl mx-auto leading-relaxed">
+          <p className="font-serif text-sm italic text-[var(--theme-text-muted)] max-w-xl mx-auto leading-relaxed">
             "Chúng tôi đi không phải để đổi chỗ, mà để xua đi tất cả định kiến, tích lũy thêm những mảng ký ức mộc mạc rực rỡ lộng lẫy dưới vương quốc của tự nhiên mây trời."
           </p>
 
@@ -144,10 +157,10 @@ export default function App() {
 
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="inline-flex items-center space-x-1.5 text-xs text-stone-300 hover:text-white uppercase tracking-widest font-mono border border-neutral-800 px-4 py-2 rounded-full cursor-pointer transition-colors bg-transparent"
+            className="inline-flex items-center space-x-1.5 text-xs text-[var(--theme-text)] hover:opacity-70 uppercase tracking-widest font-mono border border-[var(--theme-border)] px-4 py-2 rounded-full cursor-pointer transition-colors bg-transparent"
           >
             <ArrowUp className="h-3.5 w-3.5" />
-            <span>Trở về đỉnh trời</span>
+            <span>Trở về trên cùng </span>
           </button>
         </div>
       </footer>

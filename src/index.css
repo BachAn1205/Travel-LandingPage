@@ -19,6 +19,26 @@
   --animate-shimmer: shimmer 2s infinite linear;
 }
 
+:root {
+  /* LIGHT VINTAGE THEME (Sổ tay giấy ngà) */
+  --theme-bg: #F4F1EA;
+  --theme-text: #171717; 
+  --theme-text-muted: #404040;
+  --theme-border: rgba(23, 23, 23, 0.2);
+  --theme-overlay: rgba(244, 241, 234, 0.85);
+  --theme-panel: #EAE6DB;
+}
+
+.dark-theme {
+  /* DARK THEME (Rạp phim bóng tối) */
+  --theme-bg: #080808;
+  --theme-text: #fafafb;
+  --theme-text-muted: #a3a3a3;
+  --theme-border: rgba(255, 255, 255, 0.05);
+  --theme-overlay: rgba(8, 8, 8, 0.85);
+  --theme-panel: #0d0d0d;
+}
+
 @keyframes float {
   0%, 100% {
     transform: translateY(0px) rotate(0deg);
