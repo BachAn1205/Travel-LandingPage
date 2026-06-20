@@ -17,6 +17,10 @@ export default function HeroSection({ onScrollNext }: HeroSectionProps) {
       <div className="absolute inset-0 bg-gradient-to-b from-[var(--theme-bg)] via-transparent to-[var(--theme-bg)] opacity-80 z-20 pointer-events-none transition-colors duration-700" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,var(--theme-overlay)_100%)] z-20 pointer-events-none transition-colors duration-700" />
 
+      {/* Cinematic Widescreen Letterbox Bars */}
+      <div className="absolute top-0 inset-x-0 h-[5vh] bg-[var(--theme-bg)] z-20 transition-colors duration-700 border-b border-[var(--theme-border)]/30 pointer-events-none" />
+      <div className="absolute bottom-0 inset-x-0 h-[5vh] bg-[var(--theme-bg)] z-20 transition-colors duration-700 border-t border-[var(--theme-border)]/30 pointer-events-none" />
+
       {/* Background Video / Picture Element */}
       <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
         <video
@@ -33,7 +37,7 @@ export default function HeroSection({ onScrollNext }: HeroSectionProps) {
       {/* Top Navigation Frame bar (Sophisticated Dark overlay) */}
       <div className="w-full px-6 py-6 md:px-12 flex justify-between items-center z-30 mt-12">
         <div className="flex items-center space-x-3">
-          <div className="h-8 w-8 rounded-full border border-white/10 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="h-8 w-8 rounded-md border border-white/10 flex items-center justify-center bg-black/40 backdrop-blur-sm">
             <Film className="h-3.5 w-3.5 text-stone-400" />
           </div>
           <span className="font-mono tracking-[0.25em] text-[10px] uppercase text-stone-400/95 selection:bg-white selection:text-black">

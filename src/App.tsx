@@ -102,7 +102,7 @@ export default function App() {
           {/* Language Toggle Button */}
           <button
             onClick={() => setLanguage(language === "vi" ? "en" : "vi")}
-            className="px-2 py-1 text-[11px] font-mono font-bold tracking-wider rounded border border-[var(--theme-border)] hover:bg-[var(--theme-text)] hover:text-[var(--theme-bg)] text-[var(--theme-text)] transition-colors cursor-pointer"
+            className="px-2.5 py-1 text-[10px] font-mono font-bold tracking-wider rounded-md border border-[var(--theme-border)] hover:bg-[var(--theme-text)] hover:text-[var(--theme-bg)] text-[var(--theme-text)] transition-all active:scale-95 duration-300 cursor-pointer"
             title={language === "vi" ? "Switch to English" : "Chuyển sang tiếng Việt"}
             id="lang-toggle-btn"
           >
@@ -111,7 +111,7 @@ export default function App() {
 
           <button
             onClick={() => setIsDarkTheme(!isDarkTheme)}
-            className="p-1.5 rounded-full border border-[var(--theme-border)] hover:bg-[var(--theme-text)] hover:text-[var(--theme-bg)] text-[var(--theme-text)] transition-colors cursor-pointer flex items-center justify-center"
+            className="p-1.5 rounded-md border border-[var(--theme-border)] hover:bg-[var(--theme-text)] hover:text-[var(--theme-bg)] text-[var(--theme-text)] transition-all active:scale-95 duration-300 cursor-pointer flex items-center justify-center"
             title="Toggle Light/Dark Theme"
           >
             {isDarkTheme ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
@@ -192,6 +192,9 @@ export default function App() {
           <span>{toastMessage}</span>
         </div>
       )}
+
+      {/* Global Film Grain Noise Overlay */}
+      <div className="film-grain" />
     </div>
   );
 }

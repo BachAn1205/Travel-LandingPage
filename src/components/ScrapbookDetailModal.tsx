@@ -204,13 +204,13 @@ export default function ScrapbookDetailModal({ item, onClose, onLike }: Scrapboo
 
             {/* Add new user comment on the diary page */}
             <form onSubmit={handleAddComment} className="space-y-2">
-              <div className="flex space-x-2">
+              <div className="flex space-x-2 items-center">
                 <input
                   type="text"
                   placeholder={t("modal.inputName")}
                   value={commenterName}
                   onChange={(e) => setCommenterName(e.target.value)}
-                  className="w-1/3 text-xs p-2.5 rounded-lg bg-[var(--theme-bg)] border border-[var(--theme-border)] text-[var(--theme-text)] placeholder-[var(--theme-text-muted)] focus:outline-none focus:border-[var(--theme-text)] transition-colors duration-700"
+                  className="w-1/3 text-xs py-2 px-1 bg-transparent border-b-2 border-t-0 border-l-0 border-r-0 border-[var(--theme-border)] text-[var(--theme-text)] focus:border-[var(--theme-text)] focus:ring-0 transition-all duration-300 placeholder-stone-500/60 focus:outline-none"
                 />
                 <input
                   type="text"
@@ -218,11 +218,11 @@ export default function ScrapbookDetailModal({ item, onClose, onLike }: Scrapboo
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
                   required
-                  className="flex-1 text-xs p-2.5 rounded-lg bg-[var(--theme-bg)] border border-[var(--theme-border)] text-[var(--theme-text)] placeholder-[var(--theme-text-muted)] focus:outline-none focus:border-[var(--theme-text)] transition-colors duration-700"
+                  className="flex-1 text-xs py-2 px-1 bg-transparent border-b-2 border-t-0 border-l-0 border-r-0 border-[var(--theme-border)] text-[var(--theme-text)] focus:border-[var(--theme-text)] focus:ring-0 transition-all duration-300 placeholder-stone-500/60 focus:outline-none"
                 />
                 <button
                   type="submit"
-                  className="px-3.5 py-2 bg-[var(--theme-text)] hover:opacity-90 text-[var(--theme-bg)] rounded-lg font-bold text-xs transition-all cursor-pointer flex items-center justify-center border-none"
+                  className="px-3.5 py-2 bg-[var(--theme-text)] hover:opacity-90 text-[var(--theme-bg)] rounded-lg font-bold text-xs transition-all active:scale-95 duration-300 cursor-pointer flex items-center justify-center border-none"
                   title={language === "en" ? "Send feedback" : "Gửi cảm nghĩ"}
                 >
                   <Send className="h-3.5 w-3.5" />

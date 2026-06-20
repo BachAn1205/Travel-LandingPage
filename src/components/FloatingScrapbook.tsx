@@ -328,14 +328,14 @@ export default function FloatingScrapbook({
               {/* CORE POLAROID CELL */}
               <div 
                 onClick={() => onSelectMemory(item)}
-                className={`relative z-10 bg-[#F4F1EB] text-stone-700 p-4 pb-5 rounded shadow-2xl border border-black cursor-pointer ease-out transition-all duration-300 transform-gpu group hover:bg-[#FDFBF7] ${polaroidRot}`}
+                className={`relative z-10 bg-[#F4F1EB] text-stone-700 p-4 pb-5 rounded shadow-[0_12px_24px_rgba(0,0,0,0.15)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.22)] border border-stone-300/30 cursor-pointer ease-out transition-all duration-300 transform-gpu group hover:bg-[#FDFBF7] hover:scale-[1.03] hover:rotate-0 active:scale-[0.99] active:translate-y-[1px] ${polaroidRot}`}
               >
                 
                 {/* PHYSICAL WASHI TAPE STICKER */}
                 <div className={`absolute -top-4 left-1/2 transform -translate-x-1/2 w-28 h-6 backdrop-blur-[1px] border-l border-r opacity-85 z-30 shadow-md ${chosenTape}`} style={{ backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.03) 10px, rgba(255,255,255,0.03) 20px)" }} />
 
                 {/* Picture screen slot */}
-                <div className="relative w-full aspect-[4/3] bg-stone-100 overflow-hidden border border-black rounded-sm group-hover:brightness-105 transition-all duration-500">
+                <div className="relative w-full aspect-[4/3] bg-stone-100 overflow-hidden border border-stone-300/60 rounded-sm group-hover:brightness-105 transition-all duration-500">
                   <img 
                     src={item.imageUrl} 
                     alt={itemTitle} 

@@ -175,7 +175,9 @@ export default function CollabAndExportSection({
         <div className="lg:col-span-7 space-y-10">
           
           {/* A. COLLABORATIVE ALBUM COMPONENT */}
-          <div className="bg-[var(--theme-panel)] transition-colors duration-700 p-6 sm:p-8 rounded-lg shadow-2xl border border-[var(--theme-border)] transition-colors duration-700 relative">
+          <div className="bg-[var(--theme-panel)] transition-colors duration-700 p-6 sm:p-8 rounded-lg shadow-2xl border border-[var(--theme-border)] transition-colors duration-700 relative overflow-hidden">
+            {/* Ambient desk lamp spotlight glow */}
+            <div className="absolute -top-24 left-1/2 transform -translate-x-1/2 w-[350px] h-[350px] bg-amber-500/[0.04] rounded-full blur-[80px] pointer-events-none" />
             <span className="absolute top-3.5 right-4 text-[9px] font-mono tracking-widest text-[#737373] font-light">ALBUM PLATFORM</span>
             
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-[var(--theme-border)] transition-colors duration-700">
@@ -193,7 +195,7 @@ export default function CollabAndExportSection({
               <button
                 onClick={handleGlobalLike}
                 id="global-album-like-btn"
-                className={`flex items-center space-x-2 px-4 py-2 rounded-full cursor-pointer transition-all duration-300 shadow-xl ${
+                className={`flex items-center space-x-2 px-4 py-2 rounded-full cursor-pointer transition-all duration-300 shadow-xl active:scale-95 ${
                   hasLikedAlbum 
                     ? "bg-red-500/10 text-red-500 border border-red-500/30 scale-105" 
                     : "bg-[var(--theme-panel)] hover:bg-[var(--theme-border)] text-red-500 border border-[var(--theme-border)] transition-colors duration-700"
@@ -208,27 +210,30 @@ export default function CollabAndExportSection({
             {/* Traveler Avatar Stack and Status */}
             <div className="flex flex-wrap items-center justify-between gap-4 bg-[var(--theme-panel)] transition-colors duration-700 p-4 rounded-lg border border-[var(--theme-border)] transition-colors duration-700 mb-6">
               <div className="flex items-center space-x-3">
-                <div className="flex -space-x-3.5 overflow-hidden">
-                  {collaborators.map((collab) => (
-                    <div key={collab.id} className="relative group/avatar">
-                      <img
-                        className="inline-block h-10 w-10 rounded-full ring-2 ring-neutral-900 object-cover"
-                        src={collab.avatarUrl}
-                        alt={collab.name}
-                        referrerPolicy="no-referrer"
-                      />
-                      <span className="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-stone-400 ring-1.5 ring-neutral-950 animate-pulse" />
-                      
-                      {/* Tooltip */}
-                      <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 text-[10px] text-[var(--theme-text)] transition-colors duration-700 bg-[var(--theme-bg)] transition-colors duration-700/80 rounded-sm whitespace-nowrap opacity-0 group-hover/avatar:opacity-100 transition-opacity z-30">
-                        {collab.name}
-                      </span>
-                    </div>
-                  ))}
+                <div className="flex -space-x-2.5 overflow-hidden items-center">
+                  {collaborators.map((collab, index) => {
+                    const avatarRot = index % 2 === 0 ? "rotate-[-4deg]" : "rotate-[3deg]";
+                    return (
+                      <div key={collab.id} className={`relative group/avatar transition-all duration-300 hover:scale-110 hover:z-20 hover:rotate-0 ${avatarRot}`}>
+                        <img
+                          className="inline-block h-10 w-10 rounded-md ring-2 ring-[var(--theme-bg)] object-cover shadow-md"
+                          src={collab.avatarUrl}
+                          alt={collab.name}
+                          referrerPolicy="no-referrer"
+                        />
+                        <span className="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-emerald-500 ring-1.5 ring-neutral-950 animate-pulse" />
+                        
+                        {/* Tooltip */}
+                        <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 text-[10px] text-[var(--theme-text)] transition-colors duration-700 bg-[var(--theme-bg)] rounded-sm whitespace-nowrap opacity-0 group-hover/avatar:opacity-100 transition-opacity z-30 shadow-md">
+                          {collab.name}
+                        </span>
+                      </div>
+                    );
+                  })}
                   {/* Plus button representation */}
                   <button
                     onClick={() => setShowInviteInput(!showInviteInput)}
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-dark-text/5 hover:bg-dark-text text-[var(--theme-text-muted)] transition-colors duration-700 hover:text-[var(--theme-bg)] transition-colors duration-700 border border-dashed border-[var(--theme-border)] transition-colors duration-700 transition-colors cursor-pointer"
+                    className="flex h-10 w-10 items-center justify-center rounded-md bg-dark-text/5 hover:bg-dark-text text-[var(--theme-text-muted)] border border-dashed border-[var(--theme-border)] cursor-pointer transition-all duration-300 hover:scale-105 active:scale-95 ml-2"
                     title={language === "en" ? "Invite companions" : "Mời thêm bạn đồng hành"}
                   >
                     <Plus className="h-4 w-4" />
@@ -257,25 +262,25 @@ export default function CollabAndExportSection({
 
             {/* Invite Form Overlay Inside Container */}
             {showInviteInput && (
-              <form onSubmit={handleInvite} className="bg-[var(--theme-panel)] transition-colors duration-700 p-4 rounded-lg border border-[var(--theme-border)] transition-colors duration-700 mb-6 flex gap-2">
+              <form onSubmit={handleInvite} className="bg-[var(--theme-panel)] transition-colors duration-700 p-4 rounded-lg border border-[var(--theme-border)] transition-colors duration-700 mb-6 flex gap-2 items-center">
                 <input
                   type="text"
                   placeholder={language === "en" ? "Enter the name of the friend you want to add..." : "Nhập tên người bạn muốn thêm..."}
                   value={inviteName}
                   onChange={(e) => setInviteName(e.target.value)}
-                  className="flex-1 text-xs p-2.5 bg-[var(--theme-bg)] transition-colors duration-700 border border-[var(--theme-border)] transition-colors duration-700 rounded-lg text-[var(--theme-text)] transition-colors duration-700 placeholder-stone-550 focus:outline-none focus:border-[var(--theme-border)] transition-colors duration-700"
+                  className="flex-1 text-xs py-2 px-1 bg-transparent border-b-2 border-t-0 border-l-0 border-r-0 border-[var(--theme-border)] text-[var(--theme-text)] focus:border-[var(--theme-text)] focus:ring-0 transition-all duration-300 placeholder-stone-500/60 focus:outline-none"
                   required
                 />
                 <button
                   type="submit"
-                  className="bg-[var(--theme-text)] hover:opacity-80 text-[var(--theme-bg)] transition-colors duration-700 text-xs font-bold px-4 rounded-lg cursor-pointer"
+                  className="bg-[var(--theme-text)] hover:opacity-80 text-[var(--theme-bg)] transition-colors duration-700 text-xs font-bold px-4 py-2 rounded-lg cursor-pointer active:scale-95"
                 >
                   {language === "en" ? "Confirm" : "Xác nhận"}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowInviteInput(false)}
-                  className="text-[var(--theme-text-muted)] transition-colors duration-700 hover:text-[var(--theme-text)] transition-colors duration-700 text-xs px-2 cursor-pointer"
+                  className="text-[var(--theme-text-muted)] transition-colors duration-700 hover:text-[var(--theme-text)] transition-colors duration-700 text-xs px-2 cursor-pointer active:scale-95"
                 >
                   {language === "en" ? "Cancel" : "Hủy"}
                 </button>
@@ -298,7 +303,7 @@ export default function CollabAndExportSection({
                       placeholder={language === "en" ? "e.g. Misty rendezvous" : "e.g. Điểm hẹn sương mờ"}
                       value={newPhotoTitle}
                       onChange={(e) => setNewPhotoTitle(e.target.value)}
-                      className="w-full text-xs p-2.5 bg-[var(--theme-bg)] transition-colors duration-700 border border-[var(--theme-border)] transition-colors duration-700 rounded-lg text-[var(--theme-text)] transition-colors duration-700"
+                      className="w-full text-xs py-2 px-1 bg-transparent border-b-2 border-t-0 border-l-0 border-r-0 border-[var(--theme-border)] text-[var(--theme-text)] focus:border-[var(--theme-text)] focus:ring-0 transition-all duration-300 placeholder-stone-500/60 focus:outline-none"
                       required
                     />
                   </div>
@@ -309,7 +314,7 @@ export default function CollabAndExportSection({
                       placeholder={language === "en" ? "e.g. The sun started to rise warming..." : "e.g. Lúc này mặt trời bắt đầu lên ấm áp vô cùng..."}
                       value={newPhotoCaption}
                       onChange={(e) => setNewPhotoCaption(e.target.value)}
-                      className="w-full text-xs p-2.5 bg-[var(--theme-bg)] transition-colors duration-700 border border-[var(--theme-border)] transition-colors duration-700 rounded-lg text-[var(--theme-text)] transition-colors duration-700"
+                      className="w-full text-xs py-2 px-1 bg-transparent border-b-2 border-t-0 border-l-0 border-r-0 border-[var(--theme-border)] text-[var(--theme-text)] focus:border-[var(--theme-text)] focus:ring-0 transition-all duration-300 placeholder-stone-500/60 focus:outline-none"
                     />
                   </div>
 
@@ -335,7 +340,7 @@ export default function CollabAndExportSection({
 
                 <button
                   type="submit"
-                  className="w-full py-2.5 bg-[var(--theme-bg)] hover:bg-[var(--theme-panel)] text-[var(--theme-text)] border border-[var(--theme-border)] transition-colors duration-700 text-xs font-bold rounded-lg cursor-pointer transition-all shadow-md"
+                  className="w-full py-2.5 bg-[var(--theme-bg)] hover:bg-[var(--theme-panel)] text-[var(--theme-text)] border border-[var(--theme-border)] transition-colors duration-700 text-xs font-bold rounded-lg cursor-pointer transition-all shadow-md active:scale-[0.98] active:translate-y-[0.5px]"
                 >
                   {t("collab.formConfirm")}
                 </button>
@@ -381,8 +386,10 @@ export default function CollabAndExportSection({
           </div>
 
           {/* B. DETAILED CONFIGURATION FOR COMPILER */}
-          <div className="bg-[var(--theme-panel)] transition-colors duration-700 p-6 sm:p-8 rounded-lg shadow-2xl border border-[var(--theme-border)] transition-colors duration-700 space-y-6">
-            <div className="flex items-center space-x-3 pb-3 border-b border-[var(--theme-border)] transition-colors duration-700">
+          <div className="bg-[var(--theme-panel)] transition-colors duration-700 p-6 sm:p-8 rounded-lg shadow-2xl border border-[var(--theme-border)] transition-colors duration-700 space-y-6 relative overflow-hidden">
+            {/* Ambient desk lamp spotlight glow */}
+            <div className="absolute -top-24 left-1/2 transform -translate-x-1/2 w-[300px] h-[300px] bg-amber-500/[0.03] rounded-full blur-[70px] pointer-events-none" />
+            <div className="flex items-center space-x-3 pb-3 border-b border-[var(--theme-border)] transition-colors duration-700 z-10 relative">
               <span className="h-8 w-8 rounded-full bg-dark-text/5 text-[var(--theme-text)] transition-colors duration-700 flex items-center justify-center font-bold text-sm border border-[var(--theme-border)] transition-colors duration-700">03</span>
               <div>
                 <h3 className="font-serif text-lg text-[var(--theme-text)] transition-colors duration-700 font-normal">
@@ -401,7 +408,7 @@ export default function CollabAndExportSection({
                   type="text"
                   value={config.tripName}
                   onChange={(e) => setConfig({ ...config, tripName: e.target.value })}
-                  className="w-full text-xs p-2.5 bg-[var(--theme-bg)] transition-colors duration-700 border border-[var(--theme-border)] transition-colors duration-700 rounded-lg text-[var(--theme-text)] transition-colors duration-700 focus:outline-none focus:border-[var(--theme-border)] transition-colors duration-700"
+                  className="w-full text-xs py-2 px-1 bg-transparent border-b-2 border-t-0 border-l-0 border-r-0 border-[var(--theme-border)] text-[var(--theme-text)] focus:border-[var(--theme-text)] focus:ring-0 transition-all duration-300 placeholder-stone-500/60 focus:outline-none"
                 />
               </div>
 
@@ -411,7 +418,7 @@ export default function CollabAndExportSection({
                   type="text"
                   value={config.subtitle}
                   onChange={(e) => setConfig({ ...config, subtitle: e.target.value })}
-                  className="w-full text-xs p-2.5 bg-[var(--theme-bg)] transition-colors duration-700 border border-[var(--theme-border)] transition-colors duration-700 rounded-lg text-[var(--theme-text)] transition-colors duration-700 focus:outline-none"
+                  className="w-full text-xs py-2 px-1 bg-transparent border-b-2 border-t-0 border-l-0 border-r-0 border-[var(--theme-border)] text-[var(--theme-text)] focus:border-[var(--theme-text)] focus:ring-0 transition-all duration-300 placeholder-stone-500/60 focus:outline-none"
                 />
               </div>
 
@@ -421,7 +428,7 @@ export default function CollabAndExportSection({
                   type="text"
                   value={config.dates}
                   onChange={(e) => setConfig({ ...config, dates: e.target.value })}
-                  className="w-full text-xs p-2.5 bg-[var(--theme-bg)] transition-colors duration-700 border border-[var(--theme-border)] transition-colors duration-700 rounded-lg text-[var(--theme-text)] transition-colors duration-700 focus:outline-none"
+                  className="w-full text-xs py-2 px-1 bg-transparent border-b-2 border-t-0 border-l-0 border-r-0 border-[var(--theme-border)] text-[var(--theme-text)] focus:border-[var(--theme-text)] focus:ring-0 transition-all duration-300 placeholder-stone-500/60 focus:outline-none"
                 />
               </div>
 
@@ -430,7 +437,7 @@ export default function CollabAndExportSection({
                 <select
                   value={config.themeStyle}
                   onChange={(e) => setConfig({ ...config, themeStyle: e.target.value as any })}
-                  className="w-full text-xs p-2.5 bg-[var(--theme-bg)] transition-colors duration-700 border border-[var(--theme-border)] transition-colors duration-700 rounded-lg text-[var(--theme-text)] transition-colors duration-700 focus:outline-none"
+                  className="w-full text-xs py-2 px-1 bg-transparent border-b-2 border-t-0 border-l-0 border-r-0 border-[var(--theme-border)] text-[var(--theme-text)] focus:border-[var(--theme-text)] focus:ring-0 transition-all duration-300 focus:outline-none"
                 >
                   <option value="obsidian">Obsidian Matte Black</option>
                   <option value="amber">{language === "en" ? "Warm Bronze Twilight" : "Vàng Đồng Ấm Áp"}</option>
@@ -444,7 +451,7 @@ export default function CollabAndExportSection({
                   value={config.narrative}
                   onChange={(e) => setConfig({ ...config, narrative: e.target.value })}
                   rows={2}
-                  className="w-full text-xs p-2.5 bg-[var(--theme-bg)] transition-colors duration-700 border border-[var(--theme-border)] transition-colors duration-700 rounded-lg text-[var(--theme-text)] transition-colors duration-700 resize-none focus:outline-none"
+                  className="w-full text-xs py-2 px-1 bg-transparent border-b-2 border-t-0 border-l-0 border-r-0 border-[var(--theme-border)] text-[var(--theme-text)] focus:border-[var(--theme-text)] focus:ring-0 transition-all duration-300 placeholder-stone-500/60 focus:outline-none resize-none"
                 />
               </div>
             </div>
@@ -476,7 +483,7 @@ export default function CollabAndExportSection({
               onClick={triggerExportPDF}
               id="compiler-print-btn"
               disabled={isPrinting}
-              className="w-full py-4 bg-[var(--theme-bg)] hover:bg-[var(--theme-border)] border border-[var(--theme-border)] disabled:opacity-50 text-[var(--theme-text)] transition-colors duration-700 font-semibold text-xs uppercase tracking-widest rounded-full cursor-pointer shadow-lg transition-all flex items-center justify-center space-x-3.5"
+              className="w-full py-4 bg-[var(--theme-bg)] hover:bg-[var(--theme-border)] border border-[var(--theme-border)] disabled:opacity-50 text-[var(--theme-text)] transition-all font-semibold text-xs uppercase tracking-widest rounded-full cursor-pointer shadow-lg flex items-center justify-center space-x-3.5 active:scale-[0.98] active:translate-y-[0.5px]"
             >
               {isPrinting ? (
                 <>
