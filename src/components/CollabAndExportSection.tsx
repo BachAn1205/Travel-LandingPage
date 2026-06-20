@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AlbumPhoto, Collaborator, TourConfig } from "../types";
-import { UserPlus, Heart, Printer, Loader2, Sparkles, Check, Share2, Quote, Plus, Image } from "lucide-react";
+import { UserPlus, Heart, Printer, Loader2, Sparkles, Check, Share2, Quote, Plus, Image, X } from "lucide-react";
 
 interface CollabAndExportSectionProps {
   albumPhotos: AlbumPhoto[];
@@ -42,6 +42,17 @@ export default function CollabAndExportSection({
   // Printer anim state
   const [isPrinting, setIsPrinting] = useState(false);
   const [showPrintModal, setShowPrintModal] = useState(false);
+
+  useEffect(() => {
+    if (showPrintModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showPrintModal]);
 
   // Photo presets the users can choose to publish
   const travelPhotoPresets = [
@@ -123,7 +134,7 @@ export default function CollabAndExportSection({
   const themeColors = getThemeColors();
 
   return (
-    <section id="collab-section" className="relative w-full py-24 px-4 md:px-12 bg-[#090909] text-stone-200 z-10 font-sans">
+    <section id="collab-section" className={`relative w-full py-24 px-4 md:px-12 bg-[#090909] text-stone-200 font-sans ${showPrintModal ? "z-50" : "z-10"}`}>
       <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent pointer-events-none" />
 
       {/* Segment lines running in margins */}
@@ -552,9 +563,10 @@ export default function CollabAndExportSection({
                 <button
                   onClick={() => setShowPrintModal(false)}
                   id="modal-close-print-btn"
-                  className="text-stone-400 hover:text-white text-xs uppercase tracking-widest p-2 cursor-pointer"
+                  className="text-stone-400 hover:text-white p-2 cursor-pointer rounded-full hover:bg-white/10 transition-colors flex items-center justify-center"
+                  title="Đóng Modal"
                 >
-                  Đóng Preview
+                  <X className="h-5 w-5" />
                 </button>
               </div>
             </div>
