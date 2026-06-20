@@ -47,6 +47,19 @@ export default function FloatingScrapbook({
   const [activeInputId, setActiveInputId] = useState<string | null>(null);
   const [noteDraft, setNoteDraft] = useState("");
 
+  // 3D flip state: which card IDs are currently flipped to show diary back
+  const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
+
+  const toggleFlip = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setFlippedCards(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
   const handleLike = (id: string, e: React.MouseEvent) => {
     e.stopPropagation(); // Avoid launching full diary details modal
     setTimelineItems(prev =>
@@ -325,116 +338,150 @@ export default function FloatingScrapbook({
                 </span>
               </div>
 
-              {/* CORE POLAROID CELL */}
-              <div 
-                onClick={() => onSelectMemory(item)}
-                className={`relative z-10 bg-[#F4F1EB] text-stone-700 p-4 pb-5 rounded shadow-[0_12px_24px_rgba(0,0,0,0.15)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.22)] border border-stone-300/30 cursor-pointer ease-out transition-all duration-300 transform-gpu group hover:bg-[#FDFBF7] hover:scale-[1.03] hover:rotate-0 active:scale-[0.99] active:translate-y-[1px] ${polaroidRot}`}
+              {/* CORE POLAROID CELL — 3D FLIP CONTAINER */}
+              <div
+                className={`relative z-10 cursor-pointer transform-gpu ${polaroidRot} hover:rotate-0 transition-transform duration-300`}
+                style={{ perspective: "1000px" }}
+                onClick={(e) => toggleFlip(item.id, e)}
               >
-                
-                {/* PHYSICAL WASHI TAPE STICKER */}
-                <div className={`absolute -top-4 left-1/2 transform -translate-x-1/2 w-28 h-6 backdrop-blur-[1px] border-l border-r opacity-85 z-30 shadow-md ${chosenTape}`} style={{ backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.03) 10px, rgba(255,255,255,0.03) 20px)" }} />
+                <div
+                  className="relative w-full transition-transform duration-700 ease-out"
+                  style={{
+                    transformStyle: "preserve-3d",
+                    transform: flippedCards.has(item.id) ? "rotateY(180deg)" : "rotateY(0deg)",
+                  }}
+                >
+                  {/* ── FRONT FACE ── */}
+                  <div
+                    className="relative bg-[#F4F1EB] text-stone-700 p-4 pb-5 rounded shadow-[0_12px_24px_rgba(0,0,0,0.15)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.22)] border border-stone-300/30 group"
+                    style={{ backfaceVisibility: "hidden" }}
+                  >
+                    {/* PHYSICAL WASHI TAPE STICKER */}
+                    <div className={`absolute -top-4 left-1/2 transform -translate-x-1/2 w-28 h-6 backdrop-blur-[1px] border-l border-r opacity-85 z-30 shadow-md ${chosenTape}`} style={{ backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.03) 10px, rgba(255,255,255,0.03) 20px)" }} />
 
-                {/* Picture screen slot */}
-                <div className="relative w-full aspect-[4/3] bg-stone-100 overflow-hidden border border-stone-300/60 rounded-sm group-hover:brightness-105 transition-all duration-500">
-                  <img 
-                    src={item.imageUrl} 
-                    alt={itemTitle} 
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover grayscale-[20%] sepia-[10%] group-hover:grayscale-0 group-hover:sepia-0 group-hover:scale-[1.03] transition-all duration-700 ease-out transform-gpu"
-                  />
-                  
-                  {/* Location badge */}
-                  <div className="absolute top-2 left-2 bg-black/85 backdrop-blur-md text-[8.5px] text-stone-300 border border-white/10 px-2 py-0.5 rounded-full flex items-center space-x-1 uppercase tracking-widest">
-                    <MapPin className="h-2.5 w-2.5 text-stone-400" />
-                    <span className="truncate max-w-[130px]">{itemLocation.split(',')[0]}</span>
-                  </div>
+                    {/* Picture screen slot */}
+                    <div className="relative w-full aspect-[4/3] bg-stone-100 overflow-hidden border border-stone-300/60 rounded-sm group-hover:brightness-105 transition-all duration-500">
+                      <img
+                        src={item.imageUrl}
+                        alt={itemTitle}
+                        referrerPolicy="no-referrer"
+                        className="w-full h-full object-cover grayscale-[20%] sepia-[10%] group-hover:grayscale-0 group-hover:sepia-0 group-hover:scale-[1.03] transition-all duration-700 ease-out transform-gpu"
+                      />
+                      <div className="absolute top-2 left-2 bg-black/85 backdrop-blur-md text-[8.5px] text-stone-300 border border-white/10 px-2 py-0.5 rounded-full flex items-center space-x-1 uppercase tracking-widest">
+                        <MapPin className="h-2.5 w-2.5 text-stone-400" />
+                        <span className="truncate max-w-[130px]">{itemLocation.split(',')[0]}</span>
+                      </div>
+                      <span className="absolute bottom-2 right-2 bg-stone-200 text-black text-[8px] font-mono font-bold px-1.5 py-0.5 rounded-sm shadow-sm border border-stone-300">
+                        {itemDate.split(',')[1] || itemDate}
+                      </span>
+                    </div>
 
-                  <span className="absolute bottom-2 right-2 bg-stone-200 text-black text-[8px] font-mono font-bold px-1.5 py-0.5 rounded-sm shadow-sm border border-stone-300">
-                    {itemDate.split(',')[1] || itemDate}
-                  </span>
-                </div>
+                    {/* Polaroid lower margins */}
+                    <div className="mt-4 flex flex-col justify-between">
+                      <div className="space-y-1">
+                        <h3 className="font-serif text-base text-stone-900 leading-tight font-medium">{itemTitle}</h3>
+                        <div className="relative pt-1 border-t border-stone-200">
+                          <p className="font-hand text-xl text-stone-800 italic leading-snug">
+                            "{customNotes[item.id]?.[language] || (language === "en" && "handwrittenCaption_en" in item ? (item as any).handwrittenCaption_en : item.handwrittenCaption)}"
+                          </p>
+                        </div>
+                      </div>
 
-                {/* Polaroid lower margins */}
-                <div className="mt-4 flex flex-col justify-between">
-                  <div className="space-y-1">
-                    <h3 className="font-serif text-base text-stone-900 leading-tight font-medium">
-                      {itemTitle}
-                    </h3>
-                    
-                    {/* Handwritten caption */}
-                    <div className="relative pt-1 border-t border-stone-200">
-                      <p className="font-hand text-xl text-stone-800 italic leading-snug">
-                        "{customNotes[item.id]?.[language] || (language === "en" && "handwrittenCaption_en" in item ? (item as any).handwrittenCaption_en : item.handwrittenCaption)}"
-                      </p>
+                      <div className="mt-3.5 pt-2.5 border-t border-stone-200 flex items-center justify-between">
+                        <button
+                          onClick={(e) => handleLike(item.id, e)}
+                          className="flex items-center space-x-1.5 text-xs text-stone-500 hover:text-red-500 active:scale-90 transition-transform cursor-pointer"
+                        >
+                          <Heart className="h-4.5 w-4.5 fill-red-500 text-red-500" />
+                          <span className="font-mono text-xs text-stone-600 font-bold">{item.likes}</span>
+                        </button>
+
+                        {activeInputId === item.id ? (
+                          <form onSubmit={(e) => handleAddCustomNote(item.id, e)}
+                            className="flex items-center space-x-1 flex-1 ml-4"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <input type="text" value={noteDraft} onChange={(e) => setNoteDraft(e.target.value)}
+                              placeholder={t("timeline.inputPlaceholder")}
+                              className="flex-1 text-[10px] p-1.5 bg-transparent border border-stone-300 rounded text-stone-900 focus:outline-none focus:border-stone-500"
+                              maxLength={55} required autoFocus
+                            />
+                            <button type="submit" className="text-[9px] bg-stone-800 text-white px-2 py-1.5 rounded font-bold hover:bg-stone-900 cursor-pointer">
+                              {t("timeline.paste")}
+                            </button>
+                            <button type="button" onClick={() => setActiveInputId(null)} className="text-[9px] text-stone-400 hover:text-stone-600 px-1">X</button>
+                          </form>
+                        ) : (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); setNoteDraft(customNotes[item.id]?.[language] || ""); setActiveInputId(item.id); }}
+                            className="text-[9px] font-mono tracking-widest text-stone-500 hover:text-stone-900 uppercase flex items-center space-x-1 border border-stone-200 px-2 py-1 bg-stone-100 rounded-full hover:bg-stone-200"
+                          >
+                            <SquarePen className="h-3 w-3" />
+                            <span>{t("timeline.writeNote")}</span>
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="mt-2 text-center opacity-60 hover:opacity-100 transition-opacity">
+                        <span className="text-[9px] font-sans text-stone-400 tracking-wider flex items-center justify-center space-x-1">
+                          <BookOpen className="h-3 w-3" />
+                          <span>{language === "en" ? "tap to flip & read diary" : "nhấn để lật & đọc nhật ký"}</span>
+                        </span>
+                      </div>
                     </div>
                   </div>
 
-                  {/* Add manual custom note */}
-                  <div className="mt-3.5 pt-2.5 border-t border-stone-200 flex items-center justify-between">
-                    
-                    {/* Active likes */}
-                    <button
-                      onClick={(e) => handleLike(item.id, e)}
-                      className="flex items-center space-x-1.5 text-xs text-stone-500 hover:text-red-500 active:scale-90 transition-transform cursor-pointer"
-                      title="Vote Love"
-                    >
-                      <Heart className="h-4.5 w-4.5 fill-red-500 text-red-500 border-none bg-transparent" />
-                      <span className="font-mono text-xs text-stone-600 font-bold">{item.likes}</span>
-                    </button>
+                  {/* ── BACK FACE (Diary Journal) ── */}
+                  <div
+                    className="absolute inset-0 bg-[#F9F5EE] text-stone-800 p-4 rounded shadow-[0_12px_32px_rgba(0,0,0,0.2)] border border-stone-300/40 overflow-hidden"
+                    style={{
+                      backfaceVisibility: "hidden",
+                      transform: "rotateY(180deg)",
+                    }}
+                  >
+                    {/* Cardboard texture lines */}
+                    <div className="absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_24px,rgba(0,0,0,0.04)_24px,rgba(0,0,0,0.04)_25px)] pointer-events-none" />
+                    <div className="absolute left-8 top-0 bottom-0 w-px bg-red-300/40 pointer-events-none" />
 
-                    {/* Write customized text sticker */}
-                    {activeInputId === item.id ? (
-                      <form 
-                        onSubmit={(e) => handleAddCustomNote(item.id, e)}
-                        className="flex items-center space-x-1 flex-1 ml-4"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <input
-                          type="text"
-                          value={noteDraft}
-                          onChange={(e) => setNoteDraft(e.target.value)}
-                          placeholder={t("timeline.inputPlaceholder")}
-                          className="flex-1 text-[10px] p-1.5 bg-transparent border border-stone-300 rounded text-stone-900 focus:outline-none focus:border-stone-500"
-                          maxLength={55}
-                          required
-                          autoFocus
-                        />
-                        <button 
-                          type="submit"
-                          className="text-[9px] bg-stone-800 text-white px-2 py-1.5 rounded font-bold hover:bg-stone-900 cursor-pointer"
-                        >
-                          {t("timeline.paste")}
-                        </button>
-                        <button 
-                          type="button" 
-                          onClick={() => setActiveInputId(null)}
-                          className="text-[9px] text-stone-400 hover:text-stone-600 px-1"
-                        >
-                          X
-                        </button>
-                      </form>
-                    ) : (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          const currentVal = customNotes[item.id]?.[language] || "";
-                          setNoteDraft(currentVal);
-                          setActiveInputId(item.id);
-                        }}
-                        className="text-[9px] font-mono tracking-widest text-stone-500 hover:text-stone-900 uppercase flex items-center space-x-1 border border-stone-200 px-2 py-1 bg-stone-100 rounded-full hover:bg-stone-200"
-                        title="Dán thêm lời viết tay"
-                      >
-                        <SquarePen className="h-3 w-3" />
-                        <span>{t("timeline.writeNote")}</span>
-                      </button>
-                    )}
-                  </div>
+                    {/* Back header */}
+                    <div className="flex items-center justify-between mb-3 pb-2 border-b border-stone-300/60">
+                      <span className="text-[8px] font-mono tracking-[0.3em] uppercase text-stone-400">
+                        {language === "en" ? "Travel Diary" : "Nhật Ký Hành Trình"}
+                      </span>
+                      <span className="text-[8px] font-mono text-stone-400">{itemDate.split(',')[1]?.trim() || itemDate}</span>
+                    </div>
 
-                  <div className="mt-3 text-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-[10px] font-sans text-stone-500 tracking-wider flex items-center justify-center space-x-1">
-                      <BookOpen className="h-3 w-3" />
-                      <span>{t("timeline.details")}</span>
-                    </span>
+                    {/* Location stamp */}
+                    <div className="mb-3 inline-block border border-stone-400/40 rounded px-2 py-0.5 rotate-[-2deg]">
+                      <span className="text-[8px] font-mono tracking-widest uppercase text-stone-500">
+                        📍 {itemLocation}
+                      </span>
+                    </div>
+
+                    {/* Diary text */}
+                    <div className="font-hand text-sm text-stone-700 leading-relaxed mb-3">
+                      {language === "en" && "description_en" in item
+                        ? (item as any).description_en
+                        : (item as any).description || ""}
+                    </div>
+
+                    {/* Handwritten footer note */}
+                    <div className="absolute bottom-4 left-4 right-4 border-t border-stone-300/60 pt-2">
+                      <p className="font-hand text-base text-stone-600 italic">
+                        {customNotes[item.id]?.[language] || (language === "en" && "handwrittenCaption_en" in item
+                          ? (item as any).handwrittenCaption_en
+                          : item.handwrittenCaption)}
+                      </p>
+                      <div className="flex items-center justify-between mt-1">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); onSelectMemory(item); }}
+                          className="text-[8px] font-mono tracking-wider text-amber-700 hover:text-amber-900 uppercase underline cursor-pointer"
+                        >
+                          {language === "en" ? "open full diary →" : "mở nhật ký đầy đủ →"}
+                        </button>
+                        <span className="text-[8px] font-mono text-stone-400">{item.likes} ❤️</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

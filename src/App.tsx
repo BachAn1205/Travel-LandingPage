@@ -3,6 +3,8 @@ import HeroSection from "./components/HeroSection";
 import FloatingScrapbook from "./components/FloatingScrapbook";
 import CollabAndExportSection from "./components/CollabAndExportSection";
 import ScrapbookDetailModal from "./components/ScrapbookDetailModal";
+import AudioCassette from "./components/AudioCassette";
+import ScrollCompassHUD from "./components/ScrollCompassHUD";
 import { TimelineItem, AlbumPhoto, Collaborator } from "./types";
 import { initialTimelineItems, initialAlbumPhotos, initialCollaborators } from "./data";
 import { Film, Compass, ArrowUp, Sun, Moon } from "lucide-react";
@@ -195,6 +197,12 @@ export default function App() {
 
       {/* Global Film Grain Noise Overlay */}
       <div className="film-grain" />
+
+      {/* PHASE 1: Floating Vintage Cassette Player */}
+      <AudioCassette />
+
+      {/* PHASE 3: Scroll-driven Compass HUD */}
+      <ScrollCompassHUD />
     </div>
   );
 }
