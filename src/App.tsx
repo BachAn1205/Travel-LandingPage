@@ -5,7 +5,8 @@ import CollabAndExportSection from "./components/CollabAndExportSection";
 import ScrapbookDetailModal from "./components/ScrapbookDetailModal";
 import { TimelineItem, AlbumPhoto, Collaborator } from "./types";
 import { initialTimelineItems, initialAlbumPhotos, initialCollaborators } from "./data";
-import { Film, Image as ImageIcon, Sparkles, Heart, Share2, Compass, ArrowUp, Calendar, MapPin, Sun, Moon } from "lucide-react";
+import { Film, Compass, ArrowUp, Sun, Moon } from "lucide-react";
+import { useLanguage } from "./context/LanguageContext";
 
 export default function App() {
   // App-level state for interactive content
@@ -22,6 +23,8 @@ export default function App() {
   // Quick feedback toasts
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+
+  const { language, setLanguage, t } = useLanguage();
 
   const triggerToast = (msg: string) => {
     setToastMessage(msg);
@@ -40,7 +43,14 @@ export default function App() {
     setTimelineItems((prev) =>
       prev.map((item) => {
         if (item.id === id) {
-          triggerToast(`Đã lưu tim cho kỷ niệm "${item.title}"! ❤️`);
+          const itemTitle = (language === "en" && "title_en" in item) 
+            ? (item as any).title_en 
+            : item.title;
+          triggerToast(
+            language === "en"
+              ? `Saved heart for memory "${itemTitle}"! ❤️`
+              : `Đã lưu tim cho kỷ niệm "${itemTitle}"! ❤️`
+          );
           return { ...item, likes: item.likes + 1 };
         }
         return item;
@@ -66,29 +76,39 @@ export default function App() {
         </button>
 
         {/* Section Fast links exactly matched to Section numbers of reference image */}
-        <div className="flex items-center space-x-4 md:space-x-8 text-[10px] font-mono tracking-widest uppercase text-stone-400">
+        <div className="flex items-center space-x-4 md:space-x-8 text-[12px] font-mono tracking-widest uppercase text-[var(--theme-text)]">
           <button 
             onClick={() => scrollToSection("hero-section")} 
-            className="hover:text-white cursor-pointer transition-colors bg-transparent border-none hidden sm:inline-block border-b border-transparent hover:border-white/30 pb-0.5"
+            className="hover:opacity-70 text-[var(--theme-text)] cursor-pointer transition-all bg-transparent border-none hidden sm:inline-block border-b border-transparent hover:border-[var(--theme-text)] pb-0.5"
           >
-            01. Hero
+            {t("nav.hero")}
           </button>
           <button 
             onClick={() => scrollToSection("timeline-section")} 
-            className="hover:text-white cursor-pointer transition-colors bg-transparent border-none border-b border-transparent hover:border-white/20 pb-0.5 text-stone-200"
+            className="hover:opacity-70 text-[var(--theme-text)] cursor-pointer transition-all bg-transparent border-none border-b border-transparent hover:border-[var(--theme-text)] pb-0.5"
           >
-            02. Floating Film Timeline
+            {t("nav.timeline")}
           </button>
           <button 
             onClick={() => scrollToSection("collab-section")} 
-            className="hover:text-white cursor-pointer transition-colors bg-transparent border-none border-b border-transparent hover:border-white/30 pb-0.5"
+            className="hover:opacity-70 text-[var(--theme-text)] cursor-pointer transition-all bg-transparent border-none border-b border-transparent hover:border-[var(--theme-text)] pb-0.5"
           >
-            03. Features & CTA
+            {t("nav.features")}
           </button>
         </div>
 
-        {/* Floating Quick Action & Theme Switcher */}
+        {/* Floating Quick Action & Theme / Language Switcher */}
         <div className="flex items-center space-x-3">
+          {/* Language Toggle Button */}
+          <button
+            onClick={() => setLanguage(language === "vi" ? "en" : "vi")}
+            className="px-2 py-1 text-[11px] font-mono font-bold tracking-wider rounded border border-[var(--theme-border)] hover:bg-[var(--theme-text)] hover:text-[var(--theme-bg)] text-[var(--theme-text)] transition-colors cursor-pointer"
+            title={language === "vi" ? "Switch to English" : "Chuyển sang tiếng Việt"}
+            id="lang-toggle-btn"
+          >
+            {language === "vi" ? "EN" : "VI"}
+          </button>
+
           <button
             onClick={() => setIsDarkTheme(!isDarkTheme)}
             className="p-1.5 rounded-full border border-[var(--theme-border)] hover:bg-[var(--theme-text)] hover:text-[var(--theme-bg)] text-[var(--theme-text)] transition-colors cursor-pointer flex items-center justify-center"
@@ -99,13 +119,13 @@ export default function App() {
 
           <button
             onClick={() => scrollToSection("collab-section")}
-            className="px-4 py-1.5 rounded-full bg-[var(--theme-border)] hover:bg-[var(--theme-text)] text-[var(--theme-text)] hover:text-[var(--theme-bg)] text-[10px] font-sans font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer hidden md:block border-none"
+            className="px-4 py-1.5 rounded-full bg-[var(--theme-border)] hover:bg-[var(--theme-text)] text-[var(--theme-text)] hover:text-[var(--theme-bg)] text-[12px] font-sans font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer hidden md:block border-none"
           >
-            Secure Copy
+            {t("nav.secureCopy")}
           </button>
         </div>
       </nav>
-
+ 
       {/* Main Core View Modules */}
       <main className="pt-0">
         
@@ -125,6 +145,7 @@ export default function App() {
           setAlbumPhotos={setAlbumPhotos}
           collaborators={collaborators}
           setCollaborators={setCollaborators}
+          isDarkTheme={isDarkTheme}
         />
       </main>
 
@@ -140,11 +161,11 @@ export default function App() {
         <div className="max-w-4xl mx-auto space-y-6">
           <div className="flex items-center justify-center space-x-3 text-[var(--theme-text-muted)]">
             <Compass className="h-6 w-6 animate-spin-slow opacity-60" />
-            <span className="font-serif tracking-widest text-sm uppercase text-[var(--theme-text)]">THE IMMERSIVE JOURNEY</span>
+            <span className="font-serif tracking-widest text-sm uppercase text-[var(--theme-text)]">{t("footer.title")}</span>
           </div>
 
           <p className="font-serif text-sm italic text-[var(--theme-text-muted)] max-w-xl mx-auto leading-relaxed">
-            "Chúng tôi đi không phải để đổi chỗ, mà để xua đi tất cả định kiến, tích lũy thêm những mảng ký ức mộc mạc rực rỡ lộng lẫy dưới vương quốc của tự nhiên mây trời."
+            {t("footer.quote")}
           </p>
 
           <div className="flex justify-center space-x-6 text-[10px] text-stone-500 font-mono">
@@ -160,7 +181,7 @@ export default function App() {
             className="inline-flex items-center space-x-1.5 text-xs text-[var(--theme-text)] hover:opacity-70 uppercase tracking-widest font-mono border border-[var(--theme-border)] px-4 py-2 rounded-full cursor-pointer transition-colors bg-transparent"
           >
             <ArrowUp className="h-3.5 w-3.5" />
-            <span>Trở về trên cùng </span>
+            <span>{t("footer.backToTop")}</span>
           </button>
         </div>
       </footer>
@@ -168,7 +189,6 @@ export default function App() {
       {/* REACTIVE MICRO FEEDBACK TOAST NOTIFICATION */}
       {showToast && (
         <div className="fixed bottom-6 right-6 bg-[#171717]/95 text-stone-200 px-4 py-3 rounded-full shadow-2xl border border-white/10 flex items-center space-x-2.5 z-50 text-xs tracking-wider animate-bounce font-sans font-bold">
-          <Sparkles className="h-4.5 w-4.5 text-amber-400" />
           <span>{toastMessage}</span>
         </div>
       )}

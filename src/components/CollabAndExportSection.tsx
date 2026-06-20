@@ -1,28 +1,48 @@
 import React, { useState, useEffect } from "react";
 import { AlbumPhoto, Collaborator, TourConfig } from "../types";
-import { UserPlus, Heart, Printer, Loader2, Sparkles, Check, Share2, Quote, Plus, Image, X } from "lucide-react";
+import { UserPlus, Heart, Printer, Loader2, Sparkles, Check, Quote, Plus, X } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 interface CollabAndExportSectionProps {
   albumPhotos: AlbumPhoto[];
   setAlbumPhotos: React.Dispatch<React.SetStateAction<AlbumPhoto[]>>;
   collaborators: Collaborator[];
   setCollaborators: React.Dispatch<React.SetStateAction<Collaborator[]>>;
+  isDarkTheme: boolean;
 }
 
 export default function CollabAndExportSection({
   albumPhotos,
   setAlbumPhotos,
   collaborators,
-  setCollaborators
+  setCollaborators,
+  isDarkTheme
 }: CollabAndExportSectionProps) {
+  const { language, t } = useLanguage();
+
   // Config state for premium dark PDF compiler
   const [config, setConfig] = useState<TourConfig>({
-    tripName: "HÀNH TRÌNH TỰ DO",
-    subtitle: "Thước phim chầm chậm rực rỡ nhất",
-    dates: "Tháng 6, 2025",
-    narrative: "Tuổi trẻ là những chuyến đi tự do băng qua thảo nguyên và đại ngàn, tìm kiếm bóng hình của tự do mây núi...",
+    tripName: language === "en" ? "FREE JOURNEY" : "HÀNH TRÌNH TỰ DO",
+    subtitle: language === "en" ? "Our slowest, brightest film" : "Thước phim chầm chậm rực rỡ nhất",
+    dates: language === "en" ? "June, 2025" : "Tháng 6, 2025",
+    narrative: language === "en" 
+      ? "Youth is a free journey crossing meadows and deep forests, chasing the shapes of cloud and peak freedom..." 
+      : "Tuổi trẻ là những chuyến đi tự do băng qua thảo nguyên và đại ngàn, tìm kiếm bóng hình của tự do mây núi...",
     themeStyle: "obsidian"
   });
+
+  // Keep config in sync with language toggle if not modified by user
+  useEffect(() => {
+    setConfig(prev => ({
+      ...prev,
+      tripName: language === "en" ? "FREE JOURNEY" : "HÀNH TRÌNH TỰ DO",
+      subtitle: language === "en" ? "Our slowest, brightest film" : "Thước phim chầm chậm rực rỡ nhất",
+      dates: language === "en" ? "June, 2025" : "Tháng 6, 2025",
+      narrative: language === "en" 
+        ? "Youth is a free journey crossing meadows and deep forests, chasing the shapes of cloud and peak freedom..." 
+        : "Tuổi trẻ là những chuyến đi tự do băng qua thảo nguyên và đại ngàn, tìm kiếm bóng hình của tự do mây núi...",
+    }));
+  }, [language]);
 
   // Collaborative real-time reactions
   const [globalLikes, setGlobalLikes] = useState(2471);
@@ -35,7 +55,7 @@ export default function CollabAndExportSection({
   // Picture adding states for Collab card
   const [newPhotoTitle, setNewPhotoTitle] = useState("");
   const [newPhotoCaption, setNewPhotoCaption] = useState("");
-  const [newPhotoAuthor, setNewPhotoAuthor] = useState("Bạn");
+  const [newPhotoAuthor, setNewPhotoAuthor] = useState(language === "en" ? "You" : "Bạn");
   const [selectedPresetImage, setSelectedPresetImage] = useState("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=500&auto=format&fit=crop");
   const [showAddPhoto, setShowAddPhoto] = useState(false);
 
@@ -56,10 +76,10 @@ export default function CollabAndExportSection({
 
   // Photo presets the users can choose to publish
   const travelPhotoPresets = [
-    { name: "Săn Mây Đỉnh Núi", url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=550&auto=format&fit=crop" },
-    { name: "Nắng Chiều Sườn Rừng", url: "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=550&auto=format&fit=crop" },
-    { name: "Cắm Trại Đêm Bầu Trời", url: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=550&auto=format&fit=crop" },
-    { name: "Hồ Nước Sơn Cốc", url: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=550&auto=format&fit=crop" }
+    { name: language === "en" ? "Mountain Clouds" : "Săn Mây Đỉnh Núi", url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=550&auto=format&fit=crop" },
+    { name: language === "en" ? "Forest Sunset" : "Nắng Chiều Sườn Rừng", url: "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=550&auto=format&fit=crop" },
+    { name: language === "en" ? "Night Campfire" : "Cắm Trại Đêm Bầu Trời", url: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=550&auto=format&fit=crop" },
+    { name: language === "en" ? "Canyon Lake" : "Hồ Nước Sơn Cốc", url: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=550&auto=format&fit=crop" }
   ];
 
   const handleGlobalLike = () => {
@@ -81,6 +101,9 @@ export default function CollabAndExportSection({
       avatarUrl: `https://images.unsplash.com/photo-${1500000000000 + Math.floor(Math.random() * 500000)}?q=80&w=150&auto=format&fit=crop`,
       status: "Vừa tham gia album"
     };
+    if (language === "en") {
+      (newCollab as any).status_en = "Just joined the album";
+    }
     setCollaborators(prev => [...prev, newCollab]);
     setInviteName("");
     setShowInviteInput(false);
@@ -92,17 +115,21 @@ export default function CollabAndExportSection({
     const newPhoto: AlbumPhoto = {
       id: Date.now().toString(),
       title: newPhotoTitle.trim(),
-      caption: newPhotoCaption.trim() || "Khoảnh khắc lãng mạn đáng nhớ.",
-      author: newPhotoAuthor.trim() || "Khách mời",
+      caption: newPhotoCaption.trim() || (language === "en" ? "A memorable romantic moment." : "Khoảnh khắc lãng mạn đáng nhớ."),
+      author: newPhotoAuthor.trim() || (language === "en" ? "Guest" : "Khách mời"),
       imageUrl: selectedPresetImage,
       likes: 1,
-      date: "Hôm nay"
+      date: language === "en" ? "Today" : "Hôm nay"
     };
+    if (language === "en") {
+      (newPhoto as any).title_en = newPhotoTitle.trim();
+      (newPhoto as any).caption_en = newPhotoCaption.trim() || "A memorable romantic moment.";
+      (newPhoto as any).date_en = "Today";
+    }
     setAlbumPhotos(prev => [newPhoto, ...prev]);
     setNewPhotoTitle("");
     setNewPhotoCaption("");
     setShowAddPhoto(false);
-    // trigger dynamic liking reactions
     setGlobalLikes(prev => prev + 10);
   };
 
@@ -122,9 +149,13 @@ export default function CollabAndExportSection({
   const getThemeColors = () => {
     switch (config.themeStyle) {
       case "amber":
-        return { bg: "bg-[#18181b]", text: "text-amber-200", border: "border-amber-400/25", hex: "#18181b" };
+        return isDarkTheme
+          ? { bg: "bg-[#18181b] transition-colors duration-700", text: "text-amber-200 transition-colors duration-700", border: "border-amber-400/25 transition-colors duration-700", hex: "#18181b" }
+          : { bg: "bg-[#faf6ee] transition-colors duration-700", text: "text-[#5c4033] transition-colors duration-700", border: "border-[#5c4033]/25 transition-colors duration-700", hex: "#faf6ee" };
       case "quartz":
-        return { bg: "bg-[#161616]", text: "text-neutral-200", border: "border-neutral-700/50", hex: "#161616" };
+        return isDarkTheme
+          ? { bg: "bg-[#161616] transition-colors duration-700", text: "text-neutral-200 transition-colors duration-700", border: "border-neutral-700/50 transition-colors duration-700", hex: "#161616" }
+          : { bg: "bg-[#f4f6f7] transition-colors duration-700", text: "text-[#2c3e50] transition-colors duration-700", border: "border-[#2c3e50]/25 transition-colors duration-700", hex: "#f4f6f7" };
       case "obsidian":
       default:
         return { bg: "bg-[var(--theme-bg)] transition-colors duration-700", text: "text-[var(--theme-text)] transition-colors duration-700", border: "border-[var(--theme-border)] transition-colors duration-700", hex: "var(--theme-bg)" };
@@ -149,12 +180,12 @@ export default function CollabAndExportSection({
             
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-[var(--theme-border)] transition-colors duration-700">
               <div>
-                <span className="text-[9px] tracking-[0.3em] uppercase font-mono text-[var(--theme-text-muted)] transition-colors duration-700 block">SECTION 3 // COLLABORATIVE JOURNAL</span>
+                <span className="text-[9px] tracking-[0.3em] uppercase font-mono text-[var(--theme-text-muted)] transition-colors duration-700 block">{t("collab.sec3")}</span>
                 <h3 className="font-serif text-2xl sm:text-3xl font-light text-[var(--theme-text)] transition-colors duration-700 tracking-tight mt-1">
-                  Collaborative Album
+                  {t("collab.title")}
                 </h3>
                 <p className="text-xs text-[var(--theme-text-muted)] transition-colors duration-700 mt-1 leading-relaxed max-w-lg">
-                  Share moments, get real-time reactions, and build your digital archive together.
+                  {t("collab.desc")}
                 </p>
               </div>
 
@@ -164,12 +195,12 @@ export default function CollabAndExportSection({
                 id="global-album-like-btn"
                 className={`flex items-center space-x-2 px-4 py-2 rounded-full cursor-pointer transition-all duration-300 shadow-xl ${
                   hasLikedAlbum 
-                    ? "bg-action-red text-[var(--theme-text)] transition-colors duration-700 hover:bg-action-red scale-105" 
-                    : "bg-dark-text/5 hover:bg-dark-text/10 text-action-red border border-[var(--theme-border)] transition-colors duration-700"
+                    ? "bg-red-500/10 text-red-500 border border-red-500/30 scale-105" 
+                    : "bg-[var(--theme-panel)] hover:bg-[var(--theme-border)] text-red-500 border border-[var(--theme-border)] transition-colors duration-700"
                 }`}
-                title="Bấm tim cho chuyến xe"
+                title={t("collab.likeTooltip")}
               >
-                <Heart className={`h-4 w-4 ${hasLikedAlbum ? "fill-white text-[var(--theme-text)] transition-colors duration-700" : "fill-action-red text-action-red animate-pulse"}`} />
+                <Heart className={`h-4 w-4 ${hasLikedAlbum ? "fill-red-500 text-red-500" : "text-red-400 animate-pulse"}`} />
                 <span className="font-mono text-xs font-bold text-[var(--theme-text-muted)] transition-colors duration-700">{(globalLikes / 1000).toFixed(1)}K</span>
               </button>
             </div>
@@ -198,16 +229,18 @@ export default function CollabAndExportSection({
                   <button
                     onClick={() => setShowInviteInput(!showInviteInput)}
                     className="flex h-10 w-10 items-center justify-center rounded-full bg-dark-text/5 hover:bg-dark-text text-[var(--theme-text-muted)] transition-colors duration-700 hover:text-[var(--theme-bg)] transition-colors duration-700 border border-dashed border-[var(--theme-border)] transition-colors duration-700 transition-colors cursor-pointer"
-                    title="Mời thêm bạn đồng hành"
+                    title={language === "en" ? "Invite companions" : "Mời thêm bạn đồng hành"}
                   >
                     <Plus className="h-4 w-4" />
                   </button>
                 </div>
 
                 <div className="text-xs">
-                  <span className="font-bold text-[var(--theme-text-muted)] transition-colors duration-700">Đồng hành ({collaborators.length + 1} người)</span>
+                  <span className="font-bold text-[var(--theme-text-muted)] transition-colors duration-700">
+                    {t("collab.activeCollab")} ({collaborators.length + 1} {language === "en" ? "people" : "người"})
+                  </span>
                   <p className="text-[10px] text-[var(--theme-text-muted)] transition-colors duration-700 font-mono italic">
-                    {collaborators[0]?.name || "Bạn bè"} đang bổ sung ảnh...
+                    {collaborators[collaborators.length - 1]?.name || "Companion"} {language === "en" ? (collaborators[collaborators.length - 1] as any)?.status_en || "joined" : collaborators[collaborators.length - 1]?.status || "đã tham gia"}...
                   </p>
                 </div>
               </div>
@@ -217,7 +250,7 @@ export default function CollabAndExportSection({
                 onClick={() => setShowAddPhoto(!showAddPhoto)}
                 className="px-4 py-2 bg-[var(--theme-bg)] hover:bg-[var(--theme-border)] text-[var(--theme-text)] transition-colors duration-700 text-xs font-bold rounded-full cursor-pointer transition-all hover:scale-105 flex items-center space-x-1.5 shadow-md border border-[var(--theme-border)]"
               >
-                <span>Thêm Ảnh Chung</span>
+                <span>{showAddPhoto ? t("collab.hideUploadForm") : t("collab.showUploadForm")}</span>
                 <span className="bg-[var(--theme-text)] text-[var(--theme-bg)] font-extrabold text-[8px] px-1.5 py-0.5 rounded-full inline-block">LIVE</span>
               </button>
             </div>
@@ -227,7 +260,7 @@ export default function CollabAndExportSection({
               <form onSubmit={handleInvite} className="bg-[var(--theme-panel)] transition-colors duration-700 p-4 rounded-lg border border-[var(--theme-border)] transition-colors duration-700 mb-6 flex gap-2">
                 <input
                   type="text"
-                  placeholder="Nhập tên người bạn muốn thêm..."
+                  placeholder={language === "en" ? "Enter the name of the friend you want to add..." : "Nhập tên người bạn muốn thêm..."}
                   value={inviteName}
                   onChange={(e) => setInviteName(e.target.value)}
                   className="flex-1 text-xs p-2.5 bg-[var(--theme-bg)] transition-colors duration-700 border border-[var(--theme-border)] transition-colors duration-700 rounded-lg text-[var(--theme-text)] transition-colors duration-700 placeholder-stone-550 focus:outline-none focus:border-[var(--theme-border)] transition-colors duration-700"
@@ -237,14 +270,14 @@ export default function CollabAndExportSection({
                   type="submit"
                   className="bg-[var(--theme-text)] hover:opacity-80 text-[var(--theme-bg)] transition-colors duration-700 text-xs font-bold px-4 rounded-lg cursor-pointer"
                 >
-                  Xác nhận
+                  {language === "en" ? "Confirm" : "Xác nhận"}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowInviteInput(false)}
                   className="text-[var(--theme-text-muted)] transition-colors duration-700 hover:text-[var(--theme-text)] transition-colors duration-700 text-xs px-2 cursor-pointer"
                 >
-                  Hủy
+                  {language === "en" ? "Cancel" : "Hủy"}
                 </button>
               </form>
             )}
@@ -253,16 +286,16 @@ export default function CollabAndExportSection({
             {showAddPhoto && (
               <form onSubmit={handleAddPhoto} className="bg-[var(--theme-panel)] transition-colors duration-700 p-5 rounded-lg border border-[var(--theme-border)] transition-colors duration-700 mb-6 space-y-4">
                 <div className="flex justify-between items-center border-b border-[var(--theme-border)] transition-colors duration-700 pb-2">
-                  <h4 className="text-xs uppercase tracking-widest font-bold text-[var(--theme-text-muted)] transition-colors duration-700">Tải lên tấm ảnh kỷ niệm</h4>
-                  <button type="button" onClick={() => setShowAddPhoto(false)} className="text-xs text-[var(--theme-text-muted)] transition-colors duration-700 hover:text-[var(--theme-text-muted)] transition-colors duration-700 cursor-pointer">Đóng</button>
+                  <h4 className="text-xs uppercase tracking-widest font-bold text-[var(--theme-text-muted)] transition-colors duration-700">{language === "en" ? "Upload a memory photo" : "Tải lên tấm ảnh kỷ niệm"}</h4>
+                  <button type="button" onClick={() => setShowAddPhoto(false)} className="text-xs text-[var(--theme-text-muted)] transition-colors duration-700 hover:text-[var(--theme-text-muted)] transition-colors duration-700 cursor-pointer">{language === "en" ? "Close" : "Đóng"}</button>
                 </div>
 
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-[9px] uppercase font-bold text-[var(--theme-text-muted)] transition-colors duration-700 mb-1">Tên Tác Phẩm</label>
+                    <label className="block text-[9px] uppercase font-bold text-[var(--theme-text-muted)] transition-colors duration-700 mb-1">{language === "en" ? "Title" : "Tên Tác Phẩm"}</label>
                     <input
                       type="text"
-                      placeholder="e.g. Điểm hẹn sương mờ"
+                      placeholder={language === "en" ? "e.g. Misty rendezvous" : "e.g. Điểm hẹn sương mờ"}
                       value={newPhotoTitle}
                       onChange={(e) => setNewPhotoTitle(e.target.value)}
                       className="w-full text-xs p-2.5 bg-[var(--theme-bg)] transition-colors duration-700 border border-[var(--theme-border)] transition-colors duration-700 rounded-lg text-[var(--theme-text)] transition-colors duration-700"
@@ -270,10 +303,10 @@ export default function CollabAndExportSection({
                     />
                   </div>
                   <div>
-                    <label className="block text-[9px] uppercase font-bold text-[var(--theme-text-muted)] transition-colors duration-700 mb-1">Chú thích (Ghi chú tay)</label>
+                    <label className="block text-[9px] uppercase font-bold text-[var(--theme-text-muted)] transition-colors duration-700 mb-1">{language === "en" ? "Caption (Handwritten note)" : "Chú thích (Ghi chú tay)"}</label>
                     <input
                       type="text"
-                      placeholder="e.g. Lúc này mặt trời bắt đầu lên ấm áp vô cùng..."
+                      placeholder={language === "en" ? "e.g. The sun started to rise warming..." : "e.g. Lúc này mặt trời bắt đầu lên ấm áp vô cùng..."}
                       value={newPhotoCaption}
                       onChange={(e) => setNewPhotoCaption(e.target.value)}
                       className="w-full text-xs p-2.5 bg-[var(--theme-bg)] transition-colors duration-700 border border-[var(--theme-border)] transition-colors duration-700 rounded-lg text-[var(--theme-text)] transition-colors duration-700"
@@ -281,7 +314,7 @@ export default function CollabAndExportSection({
                   </div>
 
                   <div>
-                    <label className="block text-[9px] uppercase font-bold text-[var(--theme-text-muted)] transition-colors duration-700 mb-2">Chọn Góc Ảnh Phong Cảnh</label>
+                    <label className="block text-[9px] uppercase font-bold text-[var(--theme-text-muted)] transition-colors duration-700 mb-2">{language === "en" ? "Select Landscape Photo" : "Chọn Góc Ảnh Phong Cảnh"}</label>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                       {travelPhotoPresets.map(preset => (
                         <button
@@ -302,42 +335,48 @@ export default function CollabAndExportSection({
 
                 <button
                   type="submit"
-                  className="w-full py-2.5 bg-[var(--theme-text)] hover:opacity-80 text-[var(--theme-bg)] transition-colors duration-700 text-xs font-bold rounded-lg transition-colors cursor-pointer"
+                  className="w-full py-2.5 bg-[var(--theme-bg)] hover:bg-[var(--theme-panel)] text-[var(--theme-text)] border border-[var(--theme-border)] transition-colors duration-700 text-xs font-bold rounded-lg cursor-pointer transition-all shadow-md"
                 >
-                  Xác nhận tải lên album chung
+                  {t("collab.formConfirm")}
                 </button>
               </form>
             )}
 
             {/* List of active collaborative live feed photos */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {albumPhotos.map((photo) => (
-                <div key={photo.id} className="bg-[var(--theme-panel)] transition-colors duration-700 p-3.5 rounded-lg border border-[var(--theme-border)] transition-colors duration-700 shadow-sm relative group/card hover:scale-[1.01] transition-transform">
-                  <div className="aspect-[4/3] w-full overflow-hidden bg-[var(--theme-bg)] transition-colors duration-700 mb-3 border border-[var(--theme-border)] transition-colors duration-700 rounded relative">
-                    <img src={photo.imageUrl} alt={photo.title} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
-                    <span className="absolute bottom-2 left-2 bg-[var(--theme-bg)] transition-colors duration-700/80 text-[#e5e5e7] font-mono text-[8px] px-2 py-0.5 rounded uppercase">
-                      Tác giả: {photo.author}
-                    </span>
+              {albumPhotos.map((photo) => {
+                const photoTitle = language === "en" && "title_en" in photo ? (photo as any).title_en : photo.title;
+                const photoCaption = language === "en" && "caption_en" in photo ? (photo as any).caption_en : photo.caption;
+
+                return (
+                  <div key={photo.id} className="bg-[var(--theme-panel)] transition-colors duration-700 p-3.5 rounded-lg border border-[var(--theme-border)] transition-colors duration-700 shadow-sm relative group/card hover:scale-[1.01] transition-transform">
+                    <div className="aspect-[4/3] w-full overflow-hidden bg-[var(--theme-bg)] transition-colors duration-700 mb-3 border border-[var(--theme-border)] transition-colors duration-700 rounded relative">
+                      <img src={photo.imageUrl} alt={photoTitle} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+                      {/* FIXED AUTHOR BADGE COLOR: Changed from hardcoded white text to theme-aware var(--theme-text) */}
+                      <span className="absolute bottom-2 left-2 bg-[var(--theme-bg)] transition-colors duration-700/80 text-[var(--theme-text)] font-mono text-[8px] px-2 py-0.5 rounded uppercase">
+                        {t("collab.authorLabel")}{photo.author}
+                      </span>
+                    </div>
+                    <h4 className="font-serif text-sm font-light text-[var(--theme-text)] transition-colors duration-700">{photoTitle}</h4>
+                    <p className="font-hand text-lg text-[var(--theme-text-muted)] transition-colors duration-700 leading-none mt-1">"{photoCaption}"</p>
+                    
+                    {/* Photo likes indicator inside grid cards */}
+                    <div className="mt-3 pt-2 border-t border-[var(--theme-border)] transition-colors duration-700 flex justify-between items-center text-[9px] text-[#737373]">
+                      <span>{language === "en" ? "Shared Feed" : "Album Chung"}</span>
+                      <button
+                        onClick={() => {
+                          setAlbumPhotos(prev => prev.map(p => p.id === photo.id ? {...p, likes: p.likes + 1} : p));
+                          setGlobalLikes(p => p + 1);
+                        }}
+                        className="flex items-center space-x-1.5 hover:text-[var(--theme-text)] transition-colors duration-700 font-bold cursor-pointer bg-transparent border-none"
+                      >
+                        <Heart className="h-3 w-3 fill-action-red text-action-red" />
+                        <span>{photo.likes}</span>
+                      </button>
+                    </div>
                   </div>
-                  <h4 className="font-serif text-sm font-light text-[var(--theme-text)] transition-colors duration-700">{photo.title}</h4>
-                  <p className="font-hand text-lg text-[var(--theme-text-muted)] transition-colors duration-700 leading-none mt-1">"{photo.caption}"</p>
-                  
-                  {/* Photo likes indicator inside grid cards */}
-                  <div className="mt-3 pt-2 border-t border-[var(--theme-border)] transition-colors duration-700 flex justify-between items-center text-[9px] text-[#737373]">
-                    <span>Shared Feed</span>
-                    <button
-                      onClick={() => {
-                        setAlbumPhotos(prev => prev.map(p => p.id === photo.id ? {...p, likes: p.likes + 1} : p));
-                        setGlobalLikes(p => p + 1);
-                      }}
-                      className="flex items-center space-x-1.5 hover:text-[var(--theme-text)] transition-colors duration-700 font-bold cursor-pointer bg-transparent border-none"
-                    >
-                      <Heart className="h-3 w-3 fill-action-red text-action-red" />
-                      <span>{photo.likes}</span>
-                    </button>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -346,14 +385,18 @@ export default function CollabAndExportSection({
             <div className="flex items-center space-x-3 pb-3 border-b border-[var(--theme-border)] transition-colors duration-700">
               <span className="h-8 w-8 rounded-full bg-dark-text/5 text-[var(--theme-text)] transition-colors duration-700 flex items-center justify-center font-bold text-sm border border-[var(--theme-border)] transition-colors duration-700">03</span>
               <div>
-                <h3 className="font-serif text-lg text-[var(--theme-text)] transition-colors duration-700 font-normal">Configure Your Souvenir Book</h3>
-                <p className="text-xs text-[var(--theme-text-muted)] transition-colors duration-700">Customize layout settings of the output ready-to-print compilation ledger.</p>
+                <h3 className="font-serif text-lg text-[var(--theme-text)] transition-colors duration-700 font-normal">
+                  {language === "en" ? "Configure Your Souvenir Book" : "Cấu Hình Cuốn Sổ Lưu Niệm"}
+                </h3>
+                <p className="text-xs text-[var(--theme-text-muted)] transition-colors duration-700">
+                  {language === "en" ? "Customize layout settings of the output ready-to-print compilation ledger." : "Tùy chỉnh cấu hình xuất bản cho cuốn sổ tay ký ức vật lý."}
+                </p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[9px] uppercase font-bold text-[var(--theme-text-muted)] transition-colors duration-700 mb-1">Tên Chuyến Hành Trình</label>
+                <label className="block text-[9px] uppercase font-bold text-[var(--theme-text-muted)] transition-colors duration-700 mb-1">{t("collab.tripName")}</label>
                 <input
                   type="text"
                   value={config.tripName}
@@ -363,7 +406,7 @@ export default function CollabAndExportSection({
               </div>
 
               <div>
-                <label className="block text-[9px] uppercase font-bold text-[var(--theme-text-muted)] transition-colors duration-700 mb-1">Khẩu Hiệu / Subtitle</label>
+                <label className="block text-[9px] uppercase font-bold text-[var(--theme-text-muted)] transition-colors duration-700 mb-1">{t("collab.subTitle")}</label>
                 <input
                   type="text"
                   value={config.subtitle}
@@ -373,7 +416,7 @@ export default function CollabAndExportSection({
               </div>
 
               <div>
-                <label className="block text-[9px] uppercase font-bold text-[var(--theme-text-muted)] transition-colors duration-700 mb-1">Khoảng Thời Gian</label>
+                <label className="block text-[9px] uppercase font-bold text-[var(--theme-text-muted)] transition-colors duration-700 mb-1">{t("collab.dates")}</label>
                 <input
                   type="text"
                   value={config.dates}
@@ -383,20 +426,20 @@ export default function CollabAndExportSection({
               </div>
 
               <div>
-                <label className="block text-[9px] uppercase font-bold text-[var(--theme-text-muted)] transition-colors duration-700 mb-1">Chủ Đề Mỹ Thuật</label>
+                <label className="block text-[9px] uppercase font-bold text-[var(--theme-text-muted)] transition-colors duration-700 mb-1">{t("collab.selectTheme")}</label>
                 <select
                   value={config.themeStyle}
                   onChange={(e) => setConfig({ ...config, themeStyle: e.target.value as any })}
                   className="w-full text-xs p-2.5 bg-[var(--theme-bg)] transition-colors duration-700 border border-[var(--theme-border)] transition-colors duration-700 rounded-lg text-[var(--theme-text)] transition-colors duration-700 focus:outline-none"
                 >
                   <option value="obsidian">Obsidian Matte Black</option>
-                  <option value="amber">Warm Bronze Twilight</option>
-                  <option value="quartz">Frosted Crystal Quartz</option>
+                  <option value="amber">{language === "en" ? "Warm Bronze Twilight" : "Vàng Đồng Ấm Áp"}</option>
+                  <option value="quartz">{language === "en" ? "Frosted Crystal Quartz" : "Thạch Anh Trong Suốt"}</option>
                 </select>
               </div>
 
               <div className="sm:col-span-2">
-                <label className="block text-[9px] uppercase font-bold text-[#a3a3a3] mb-1">Trích lục hành trình</label>
+                <label className="block text-[9px] uppercase font-bold text-[#a3a3a3] mb-1">{t("collab.narrative")}</label>
                 <textarea
                   value={config.narrative}
                   onChange={(e) => setConfig({ ...config, narrative: e.target.value })}
@@ -406,25 +449,25 @@ export default function CollabAndExportSection({
               </div>
             </div>
 
-            {/* Features checkmarks as requested */}
+            {/* Features checkmarks */}
             <div className="flex flex-wrap items-center justify-between p-3.5 bg-[var(--theme-bg)] transition-colors duration-700 rounded-lg border border-[var(--theme-border)] transition-colors duration-700 gap-3">
               <div className="flex items-center space-x-1.5 text-xs text-[var(--theme-text-muted)] transition-colors duration-700">
                 <div className="p-1 bg-dark-text/5 rounded-full text-[var(--theme-text)] transition-colors duration-700">
                   <Check className="h-3 w-3" />
                 </div>
-                <span>High Quality</span>
+                <span>{language === "en" ? "Premium Quality" : "Chất Lượng Cao"}</span>
               </div>
               <div className="flex items-center space-x-1.5 text-xs text-[var(--theme-text-muted)] transition-colors duration-700">
                 <div className="p-1 bg-dark-text/5 rounded-full text-[var(--theme-text)] transition-colors duration-700">
                   <Check className="h-3 w-3" />
                 </div>
-                <span>Print Ready</span>
+                <span>{language === "en" ? "Print Ready" : "Sẵn Sàng In Ấn"}</span>
               </div>
               <div className="flex items-center space-x-1.5 text-xs text-[var(--theme-text-muted)] transition-colors duration-700">
                 <div className="p-1 bg-dark-text/5 rounded-full text-[var(--theme-text)] transition-colors duration-700">
                   <Check className="h-3 w-3" />
                 </div>
-                <span>Easy to Share</span>
+                <span>{language === "en" ? "Easy to Share" : "Chia Sẻ Dễ Dàng"}</span>
               </div>
             </div>
 
@@ -437,28 +480,29 @@ export default function CollabAndExportSection({
             >
               {isPrinting ? (
                 <>
-                  <Loader2 className="h-4 w-4 animate-spin text-[var(--theme-bg)] transition-colors duration-700" />
-                  <span className="tracking-wider">ĐANG BIÊN TẬP SÁCH ẢNH...</span>
+                  <Loader2 className="h-4 w-4 animate-spin text-[var(--theme-text)] transition-colors duration-700" />
+                  <span className="tracking-wider">{language === "en" ? "COMPILING SOUVENIR BOOK..." : "ĐANG BIÊN TẬP SÁCH ẢNH..."}</span>
                 </>
               ) : (
                 <>
                   <Printer className="h-4 w-4 text-[var(--theme-text)] transition-colors duration-700" />
-                  <span className="tracking-widest">Export to PDF Souvenir</span>
+                  <span className="tracking-widest">{t("collab.exportBtn")}</span>
                 </>
               )}
             </button>
           </div>
         </div>
 
-        {/* RIGHT SIDE: Interactive virtual polaroid printer & margins annotations */}
+        {/* RIGHT SIDE: Interactive virtual polaroid printer */}
         <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-20">
           
           {/* Printer Device mockup body */}
           <div className="bg-[var(--theme-panel)] transition-colors duration-700 p-6 rounded-xl shadow-2xl border border-[var(--theme-border)] transition-colors duration-700 relative overflow-hidden flex flex-col items-center">
             
-            {/* Hand-drawn style annotations pointing to the printer */}
             <div className="absolute top-2 left-6 z-20 pointer-events-none transform -rotate-12 hidden xs:block">
-              <span className="font-hand text-xl text-[var(--theme-text-muted)] transition-colors duration-700 leading-none">Memories together.</span>
+              <span className="font-hand text-xl text-[var(--theme-text-muted)] transition-colors duration-700 leading-none">
+                {language === "en" ? "Memories together." : "Ký ức chung bước."}
+              </span>
             </div>
 
             {/* Custom status dial light */}
@@ -473,12 +517,11 @@ export default function CollabAndExportSection({
             {/* Virtual Device Slot where sheet prints out */}
             <div className="relative w-full aspect-[4/3] bg-[var(--theme-bg)] transition-colors duration-700 rounded border border-[var(--theme-border)] transition-colors duration-700 overflow-hidden flex flex-col justify-end p-1">
               
-              {/* LED Line Feed representing laser printer slide */}
               {isPrinting && (
                 <div className="absolute top-0 inset-x-0 h-1 bg-dark-text shadow-[0_0_8px_white] z-30 animate-bounce duration-500" />
               )}
 
-              {/* Printed Album Sheet sliding upwards based on states */}
+              {/* Printed Album Sheet sliding upwards */}
               <div
                 className={`w-[93%] mx-auto ${themeColors.bg} ${themeColors.text} p-4 rounded border ${themeColors.border} transition-all duration-[1500ms] ease-out origin-bottom transform ${
                   isPrinting 
@@ -487,21 +530,20 @@ export default function CollabAndExportSection({
                 }`}
                 style={{ minHeight: "220px" }}
               >
-                {/* Vintage details inside printed page */}
-                <div className="flex justify-between items-center border-b border-[var(--theme-border)] transition-colors duration-700 pb-2 mb-3">
-                  <span className="text-[8px] font-mono tracking-widest font-light uppercase text-[var(--theme-text-muted)] transition-colors duration-700">SOUVENIR MANIFESTO</span>
-                  <span className="text-[7.5px] font-mono tracking-wider font-light text-[var(--theme-text-muted)] transition-colors duration-700 uppercase">{config.dates}</span>
+                <div className={`flex justify-between items-center border-b ${themeColors.border} pb-2 mb-3`}>
+                  <span className="text-[8px] font-mono tracking-widest font-light uppercase opacity-80">SOUVENIR MANIFESTO</span>
+                  <span className="text-[7.5px] font-mono tracking-wider font-light opacity-70 uppercase">{config.dates}</span>
                 </div>
 
                 <div className="space-y-2">
-                  <span className="font-serif text-[10px] italic tracking-widest text-[var(--theme-text-muted)] transition-colors duration-700 block">OUR PATH:</span>
-                  <h4 className="font-serif text-sm font-light tracking-tight leading-none uppercase text-[var(--theme-text)] transition-colors duration-700">
+                  <span className="font-serif text-[10px] italic tracking-widest opacity-80 block">OUR PATH:</span>
+                  <h4 className="font-serif text-sm font-light tracking-tight leading-none uppercase font-semibold">
                     {config.tripName || "Tour Book title"}
                   </h4>
-                  <p className="font-hand text-lg text-[var(--theme-text-muted)] transition-colors duration-700 leading-none mb-1">"{config.subtitle}"</p>
+                  <p className="font-hand text-lg opacity-90 leading-none mb-1">"{config.subtitle}"</p>
                   
                   {/* Small postcard photo matching live feed */}
-                  <div className="w-full h-18 overflow-hidden rounded border border-[var(--theme-border)] transition-colors duration-700 bg-[var(--theme-bg)] transition-colors duration-700">
+                  <div className={`w-full h-18 overflow-hidden rounded border ${themeColors.border} ${themeColors.bg}`}>
                     <img 
                       src={selectedPresetImage} 
                       referrerPolicy="no-referrer" 
@@ -511,8 +553,8 @@ export default function CollabAndExportSection({
                   </div>
 
                   {/* Print micro excerpts */}
-                  <p className="text-[10px] italic leading-relaxed text-[var(--theme-text-muted)] transition-colors duration-700 line-clamp-2 select-text font-serif">
-                    {config.narrative || "Hành trình mộc mạc lưu lại những ký ức rực rỡ nhất."}
+                  <p className="text-[10px] italic leading-relaxed opacity-80 line-clamp-2 select-text font-serif">
+                    {config.narrative || (language === "en" ? "A rustic journey preserving our brightest memories." : "Hành trình mộc mạc lưu lại những ký ức rực rỡ nhất.")}
                   </p>
                 </div>
               </div>
@@ -529,14 +571,19 @@ export default function CollabAndExportSection({
               className="mt-6 px-5 py-2.5 bg-[var(--theme-bg)] hover:bg-[var(--theme-border)] text-[var(--theme-text)] transition-colors duration-700 rounded-full border border-[var(--theme-border)] transition-colors duration-700 text-[10px] font-mono tracking-widest shadow-md transition-all active:scale-95 cursor-pointer flex items-center space-x-2"
             >
               <Printer className="h-3.5 w-3.5 text-[var(--theme-text)]" />
-              <span>FEED PHOTO SHEETS</span>
+              <span>{t("collab.ejectCard")}</span>
             </button>
           </div>
 
           {/* Quick info panel */}
           <div className="bg-[var(--theme-panel)] transition-colors duration-700 p-5 rounded border border-[var(--theme-border)] transition-colors duration-700 text-xs text-[var(--theme-text-muted)] transition-colors duration-700 leading-relaxed text-justify">
-            <h4 className="font-bold text-[var(--theme-text-muted)] transition-colors duration-700 mb-1.5 uppercase font-mono tracking-wider text-[10px]">Lưu Tri Kỷ Niệm</h4>
-            Tính năng export sẽ tổng hợp toàn bộ ảnh có trong album chung được tải lên từ tất cả đồng hành lữ khách, tạo ra file PDF hoàn thiện để lưu trữ làm quà lưu niệm.
+            <h4 className="font-bold text-[var(--theme-text-muted)] transition-colors duration-700 mb-1.5 uppercase font-mono tracking-wider text-[10px]">
+              {language === "en" ? "Preserve Memories" : "Lưu Tri Kỷ Niệm"}
+            </h4>
+            {language === "en"
+              ? "The export feature compiles all photos in the shared album uploaded by all travelers, creating a complete PDF file for souvenir preservation."
+              : "Tính năng export sẽ tổng hợp toàn bộ ảnh có trong album chung được tải lên từ tất cả đồng hành lữ khách, tạo ra file PDF hoàn thiện để lưu trữ làm quà lưu niệm."
+            }
           </div>
         </div>
       </div>
@@ -550,21 +597,23 @@ export default function CollabAndExportSection({
             <div className="bg-[var(--theme-bg)] transition-colors duration-700 text-[var(--theme-text-muted)] transition-colors duration-700 px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-[var(--theme-border)] transition-colors duration-700">
               <div className="flex items-center space-x-2.5">
                 <Printer className="h-4 w-4 text-[var(--theme-text-muted)] transition-colors duration-700" />
-                <span className="font-serif tracking-widest text-xs uppercase">PREVIEW PRINT-READY ALBUM</span>
+                <span className="font-serif tracking-widest text-xs uppercase">
+                  {language === "en" ? "PREVIEW PRINT-READY ALBUM" : "XEM TRƯỚC BẢN ALBUM SẴN SÀNG IN"}
+                </span>
               </div>
               <div className="flex items-center space-x-3.5">
                 <button
                   onClick={confirmPhysicalPrint}
                   id="modal-confirm-print-btn"
-                  className="px-4 py-2 bg-dark-text hover:bg-neutral-205 text-[var(--theme-bg)] transition-colors duration-700 font-semibold text-xs uppercase tracking-widest rounded transition-all cursor-pointer shadow-md"
+                  className="px-4 py-2 bg-[var(--theme-bg)] hover:bg-[var(--theme-panel)] text-[var(--theme-text)] border border-[var(--theme-border)] transition-colors duration-700 font-semibold text-xs uppercase tracking-widest rounded transition-all cursor-pointer shadow-md"
                 >
-                  Confirm & Print PDF
+                  {t("collab.confirmPrint")}
                 </button>
                 <button
                   onClick={() => setShowPrintModal(false)}
                   id="modal-close-print-btn"
                   className="text-[var(--theme-text-muted)] transition-colors duration-700 hover:text-[var(--theme-text)] transition-colors duration-700 p-2 cursor-pointer rounded-full hover:bg-dark-text/10 transition-colors flex items-center justify-center"
-                  title="Đóng Modal"
+                  title="Close Modal"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -579,16 +628,18 @@ export default function CollabAndExportSection({
                 
                 {/* Cover Header */}
                 <div className="text-center pb-8 border-b border-[var(--theme-border)] transition-colors duration-700 mb-8">
-                  <div className="text-[9px] tracking-[0.45em] uppercase font-mono text-stone-550 font-extrabold mb-3">SỔ LƯU NIỆM DU HÀNH</div>
+                  <div className="text-[9px] tracking-[0.45em] uppercase font-mono text-stone-550 font-extrabold mb-3">
+                    {language === "en" ? "TRAVEL MEMORIES JOURNAL" : "SỔ LƯU NIỆM DU HÀNH"}
+                  </div>
                   <h1 className="text-3xl md:text-[var(--theme-text)] transition-colors duration-700xl font-light uppercase tracking-tight text-[var(--theme-text)] transition-colors duration-700 mb-2 leading-none">
                     {config.tripName}
                   </h1>
                   <p className="font-hand text-3xl text-[var(--theme-text-muted)] transition-colors duration-700 leading-none">"{config.subtitle}"</p>
                   
-                  <div className="flex justify-center items-center space-x-4 mt-6 text-xs text-stone-450 tracking-wider font-mono uppercase">
-                    <span>DATES: {config.dates}</span>
+                  <div className="flex justify-center items-center space-x-4 mt-6 text-xs text-stone-455 tracking-wider font-mono uppercase">
+                    <span>{language === "en" ? "DATES" : "KHOẢNG THỜI GIAN"}: {config.dates}</span>
                     <span>•</span>
-                    <span>CREATORS: Bạn & {collaborators.map(c => c.name).join(", ")}</span>
+                    <span>{language === "en" ? "CREATORS" : "NGƯỜI TẠO"}: {language === "en" ? "You" : "Bạn"} & {collaborators.map(c => c.name).join(", ")}</span>
                   </div>
                 </div>
 
@@ -603,7 +654,10 @@ export default function CollabAndExportSection({
 
                     <div className="bg-[var(--theme-panel)] transition-colors duration-700 p-4 border border-[var(--theme-border)] transition-colors duration-700 rounded italic text-xs text-[var(--theme-text-muted)] transition-colors duration-700 leading-relaxed font-sans relative">
                       <Quote className="h-5 w-5 text-stone-600 absolute -top-2 -left-2" />
-                      "Những cảnh sắc trôi qua mộc mạc bên đường để lại nụ cười rạng rỡ của bạn bè, tiếng hát ngâm vang giáp đồi dốc. Chúng tôi đã khắc ghi một hành trình tuổi trẻ không phai nhòa."
+                      {language === "en" 
+                        ? "\"The simple sceneries passing along the road left bright smiles of friends, echoing songs on the hillsides. We have etched a youth journey that never fades.\""
+                        : "\"Những cảnh sắc trôi qua mộc mạc bên đường để lại nụ cười rạng rỡ của bạn bè, tiếng hát ngâm vang giáp đồi dốc. Chúng tôi đã khắc ghi một hành trình tuổi trẻ không phai nhòa.\""
+                      }
                     </div>
                   </div>
 
@@ -623,16 +677,22 @@ export default function CollabAndExportSection({
 
                 {/* Index of included photographic stories */}
                 <div className="border-t border-dashed border-[var(--theme-border)] transition-colors duration-700 pt-6">
-                  <h3 className="text-[9px] font-mono uppercase tracking-widest text-[var(--theme-text-muted)] transition-colors duration-700 font-bold mb-4">MỤC LỤC KÝ ỨC CHUYẾN ĐI ({albumPhotos.length} ảnh chung)</h3>
+                  <h3 className="text-[9px] font-mono uppercase tracking-widest text-[var(--theme-text-muted)] transition-colors duration-700 font-bold mb-4">
+                    {language === "en" ? "JOURNEY MEMORIES INDEX" : "MỤC LỤC KÝ ỨC CHUYẾN ĐI"} ({albumPhotos.length} {language === "en" ? "shared photos" : "ảnh chung"})
+                  </h3>
                   
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                    {albumPhotos.map((photo, i) => (
-                      <div key={photo.id} className="text-xs font-mono">
-                        <span className="text-stone-450 mr-1">[0{i+1}]</span>
-                        <span className="font-normal text-[var(--theme-text-muted)] transition-colors duration-700 uppercase">{photo.title}</span>
-                        <p className="text-[10px] text-[var(--theme-text-muted)] transition-colors duration-700 italic mt-0.5">Tác giả: {photo.author}</p>
-                      </div>
-                    ))}
+                    {albumPhotos.map((photo, i) => {
+                      const photoTitle = language === "en" && "title_en" in photo ? (photo as any).title_en : photo.title;
+
+                      return (
+                        <div key={photo.id} className="text-xs font-mono">
+                          <span className="text-stone-450 mr-1">[0{i+1}]</span>
+                          <span className="font-normal text-[var(--theme-text-muted)] transition-colors duration-700 uppercase">{photoTitle}</span>
+                          <p className="text-[10px] text-[var(--theme-text-muted)] transition-colors duration-700 italic mt-0.5">{t("collab.authorLabel")}{photo.author}</p>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -648,4 +708,3 @@ export default function CollabAndExportSection({
     </section>
   );
 }
-

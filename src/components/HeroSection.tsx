@@ -1,5 +1,6 @@
- import React, { useState } from "react";
-import { Play, Volume2, VolumeX, ArrowDown, Sparkles, Film } from "lucide-react";
+import React from "react";
+import { ArrowDown, Film } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 interface HeroSectionProps {
   onScrollNext: () => void;
@@ -8,6 +9,7 @@ interface HeroSectionProps {
 export default function HeroSection({ onScrollNext }: HeroSectionProps) {
   // Cinematic video asset
   const videoUrl = "/video/2.mp4";
+  const { t } = useLanguage();
 
   return (
     <section id="hero-section" className="relative h-screen w-full overflow-hidden bg-[var(--theme-bg)] flex flex-col justify-between text-[var(--theme-text)] z-10 select-none transition-colors duration-700">
@@ -44,20 +46,20 @@ export default function HeroSection({ onScrollNext }: HeroSectionProps) {
       <div className="flex-1 flex flex-col justify-center items-center text-center px-4 md:px-6 z-30 pb-16">
         {/* Title Elements - Sleek & Light to match Elegant Design */}
         <h1 className="font-serif text-5xl sm:text-7xl md:text-8xl font-light tracking-tight text-[var(--theme-text)] mb-6 leading-none px-1 selection:bg-[var(--theme-text)] selection:text-[var(--theme-bg)] transition-colors duration-700">
-          The Summit <br/>
-          <span className="italic font-light text-[var(--theme-text-muted)]">Beyond Photography.</span>
+          {t("hero.title1")} <br/>
+          <span className="italic font-light text-[var(--theme-text-muted)]">{t("hero.title2")}</span>
         </h1>
         
         <p className="font-hand text-2xl sm:text-3xl text-[var(--theme-text-muted)] italic max-w-2xl px-4 select-none transform rotate-[-1deg] translate-y-1 transition-colors duration-700">
-          "It's the cinematic journey of your life."
+          {t("hero.subtitle")}
         </p>
       </div>
 
       {/* Bottom Frame / Scroll Indicator / Location Badge */}
       <div className="w-full px-6 py-6 md:px-12 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 z-30 bg-gradient-to-t from-[var(--theme-bg)] to-transparent pb-8 transition-colors duration-700">
         <div className="text-left hidden sm:block">
-          <p className="text-[9px] tracking-[0.3em] font-mono uppercase text-[var(--theme-text-muted)]">SECTION 1 // HERO</p>
-          <p className="font-sans text-xs text-[var(--theme-text-muted)] font-light">"Silence of the high peaks."</p>
+          <p className="text-[9px] tracking-[0.3em] font-mono uppercase text-[var(--theme-text-muted)]">{t("hero.sec1")}</p>
+          <p className="font-sans text-xs text-[var(--theme-text-muted)] font-light">{t("hero.peaks")}</p>
         </div>
 
         {/* Scroll down button in center */}
@@ -66,7 +68,7 @@ export default function HeroSection({ onScrollNext }: HeroSectionProps) {
           id="hero-scroll-btn"
           className="group flex flex-col items-center justify-center space-y-2 text-xs uppercase tracking-widest text-[var(--theme-text-muted)] hover:opacity-70 transition-colors duration-300 cursor-pointer border-none bg-transparent"
         >
-          <span className="font-sans text-[9px] tracking-[0.3em] text-center transition-colors duration-300">SCROLL TO EXPLORE</span>
+          <span className="font-sans text-[9px] tracking-[0.3em] text-center transition-colors duration-300">{t("hero.scroll")}</span>
           <ArrowDown className="h-3.5 w-3.5 group-hover:translate-y-1 transition-transform" />
         </button>
 
