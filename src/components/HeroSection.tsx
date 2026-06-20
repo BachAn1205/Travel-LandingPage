@@ -6,9 +6,8 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ onScrollNext }: HeroSectionProps) {
-  // Cinematic video asset (high-quality mountain peak hiking scenes)
+  // Cinematic video asset
   const videoUrl = "/video/2.mp4";
-  const posterUrl = "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1920&auto=format&fit=crop";
 
   return (
     <section id="hero-section" className="relative h-screen w-full overflow-hidden bg-[#080808] flex flex-col justify-between text-stone-200 z-10 select-none">
@@ -24,10 +23,8 @@ export default function HeroSection({ onScrollNext }: HeroSectionProps) {
           muted
           playsInline
           className="absolute inset-0 w-full h-full object-cover scale-[1.03] transition-all duration-1000 brightness-[0.7] contrast-[1.05]"
-          poster={posterUrl}
         >
           <source src={videoUrl} type="video/mp4" />
-          <img src={posterUrl} alt="Mountain view fallback" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
         </video>
       </div>
 
