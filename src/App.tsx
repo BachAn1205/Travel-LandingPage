@@ -78,24 +78,33 @@ export default function App() {
         </button>
 
         {/* Section Fast links exactly matched to Section numbers of reference image */}
-        <div className="flex items-center space-x-4 md:space-x-8 text-[12px] font-mono tracking-widest uppercase text-[var(--theme-text)]">
+        <div className="flex items-center space-x-6 sm:space-x-8 md:space-x-12 text-[12px] font-mono tracking-widest uppercase text-[var(--theme-text)]">
           <button 
             onClick={() => scrollToSection("hero-section")} 
-            className="hover:opacity-70 text-[var(--theme-text)] cursor-pointer transition-all bg-transparent border-none hidden sm:inline-block border-b border-transparent hover:border-[var(--theme-text)] pb-0.5"
+            className="group hover:opacity-70 text-[var(--theme-text)] cursor-pointer transition-all bg-transparent border-none pb-0.5 text-left flex items-center w-[120px] sm:w-[145px] md:w-[170px]"
           >
-            {t("nav.hero")}
+            <span className="mr-1.5 font-bold flex-shrink-0">01.</span>
+            <span className="border-b border-transparent group-hover:border-[var(--theme-text)] pb-0.5 truncate transition-all duration-300">
+              {language === "vi" ? "Lời Mở Đầu" : "Prologue"}
+            </span>
           </button>
           <button 
             onClick={() => scrollToSection("timeline-section")} 
-            className="hover:opacity-70 text-[var(--theme-text)] cursor-pointer transition-all bg-transparent border-none border-b border-transparent hover:border-[var(--theme-text)] pb-0.5"
+            className="group hover:opacity-70 text-[var(--theme-text)] cursor-pointer transition-all bg-transparent border-none pb-0.5 text-left flex items-center w-[150px] sm:w-[175px] md:w-[200px]"
           >
-            {t("nav.timeline")}
+            <span className="mr-1.5 font-bold flex-shrink-0">02.</span>
+            <span className="border-b border-transparent group-hover:border-[var(--theme-text)] pb-0.5 truncate transition-all duration-300">
+              {language === "vi" ? "Lưu Bút Ký Ức" : "Memory Journal"}
+            </span>
           </button>
           <button 
             onClick={() => scrollToSection("collab-section")} 
-            className="hover:opacity-70 text-[var(--theme-text)] cursor-pointer transition-all bg-transparent border-none border-b border-transparent hover:border-[var(--theme-text)] pb-0.5"
+            className="group hover:opacity-70 text-[var(--theme-text)] cursor-pointer transition-all bg-transparent border-none pb-0.5 text-left flex items-center w-[180px] sm:w-[215px] md:w-[245px]"
           >
-            {t("nav.features")}
+            <span className="mr-1.5 font-bold flex-shrink-0">03.</span>
+            <span className="border-b border-transparent group-hover:border-[var(--theme-text)] pb-0.5 truncate transition-all duration-300">
+              {language === "vi" ? "Đồng Hành & Kỷ Vật" : "Co-op & Souvenir"}
+            </span>
           </button>
         </div>
 

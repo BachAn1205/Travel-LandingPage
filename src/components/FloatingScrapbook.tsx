@@ -216,8 +216,13 @@ export default function FloatingScrapbook({
         {timelineItems.map((item, index) => {
           const itemRotations = ["-rotate-2", "rotate-3", "-rotate-1", "rotate-2", "-rotate-3"];
           const polaroidRot = itemRotations[index % itemRotations.length];
-          const noteLefts = ["-left-6", "left-40", "-left-10", "left-36"];
+          // Horizontal positions — card 2 (index 1) pushed further left to avoid overlapping card 3
+          const noteLefts = ["-left-6", "-left-14", "-left-10", "left-36", "-left-8", "left-32", "-left-12"];
           const notePosition = noteLefts[index % noteLefts.length];
+
+          // Unique random-feeling rotations per card so none are aligned
+          const noteRotations = [-3, 4, -6, 2, -5, 7, -2];
+          const noteRot = noteRotations[index % noteRotations.length];
 
           const tapes = [
             "bg-amber-500/25 rotate-3 border-amber-300/10",
@@ -289,8 +294,8 @@ export default function FloatingScrapbook({
               
               {/* VINTAGE WRITTEN NOTE CARD */}
               <div 
-                className={`absolute ${notePosition} -top-16 w-60 bg-[var(--theme-panel)] p-4 rounded-lg shadow-xl border border-[var(--theme-border)] font-hand select-text transform sc-parallax-slower z-10 hover:z-40 hover:scale-105 transition-all duration-300`}
-                style={{ transformOrigin: "center bottom" }}
+                className={`absolute ${notePosition} top-4 w-60 bg-[var(--theme-panel)] p-4 rounded-lg shadow-xl border border-[var(--theme-border)] font-hand select-text sc-parallax-slower z-10 hover:z-40 hover:scale-105 transition-all duration-300`}
+                style={{ transform: `rotate(${noteRot}deg)`, transformOrigin: "center bottom" }}
               >
                 <div className="absolute -top-3.5 left-1/2 transform -translate-x-1/2 text-stone-500 hover:text-stone-300 cursor-pointer">
                   <Pin className="h-4.5 w-4.5 text-stone-400 rotate-12" />
